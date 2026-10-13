@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Wealth's Tech | We Build the Web. You Build the Wealth.</title>
+<meta name="description" content="Wealth's Tech designs and builds websites and web apps, registers domains, sets up hosting and gets your business found on Google." />
+<meta property="og:title" content="Wealth's Tech | Web Development, Domains, Hosting & Google Presence" />
+<meta property="og:description" content="We build the web. You build the wealth. Websites, web apps, domains, hosting and SEO." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="assets/logo.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" type="image/png" href="assets/logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+/* ==========================================================
+   1. TOKENS & RESET
+   ========================================================== */
+:root{
+  --black:#05070D; --blue:#00AEEF; --blue2:#0057FF; --silver:#C9D3E0;
+  --green:#25D366; --green2:#0B7A3E;
+  --glass:rgba(255,255,255,.05); --line:rgba(0,174,239,.25);
+  --bg-mix:0;
+  --accent:var(--blue);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,system-ui,sans-serif;color:#E8EEF7;background:var(--black);overflow-x:hidden;line-height:1.6}
+h1,h2,h3,h4{font-family:Sora,sans-serif;line-height:1.1}
+a{color:inherit;text-decoration:none}
+img,video{display:block;max-width:100%}
+.container{width:min(1200px,92%);margin:0 auto}
+.grad-text{background:linear-gradient(90deg,#fff,var(--blue) 50%,var(--blue2));-webkit-background-clip:text;background-clip:text;color:transparent}
+section{position:relative;padding:120px 0;z-index:2}
+.eyebrow{font-size:.8rem;letter-spacing:.3em;text-transform:uppercase;color:var(--blue);margin-bottom:14px}
+.section-title{font-size:clamp(2rem,5vw,3.4rem);margin-bottom:18px}
+.section-sub{color:#9fb0c6;max-width:560px}
+
+/* Page background: blue -> green, driven by --bg-mix */
+#bg{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+   radial-gradient(60% 50% at 20% 20%, rgba(0,87,255,calc(.35*(1 - var(--bg-mix)))), transparent 70%),
+   radial-gradient(50% 40% at 80% 70%, rgba(0,174,239,calc(.25*(1 - var(--bg-mix)))), transparent 70%),
+   radial-gradient(60% 50% at 30% 80%, rgba(37,211,102,calc(.35*var(--bg-mix))), transparent 70%),
+   radial-gradient(50% 50% at 80% 20%, rgba(11,122,62,calc(.45*var(--bg-mix))), transparent 70%),
+   var(--black);}
+#grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.06;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+
+/* Screen blend hides the logo's black background */
+.logo-img{mix-blend-mode:screen}
+
+/* 2. PRELOADER */
+#preloader{position:fixed;inset:0;z-index:100;background:var(--black);display:grid;place-items:center;transition:opacity .8s,visibility .8s}
+#preloader.done{opacity:0;visibility:hidden}
+.pre-inner{text-align:center}
+.pre-inner img{width:180px;margin:0 auto 24px;opacity:0;animation:fadeIn 1s .2s forwards;filter:drop-shadow(0 0 30px rgba(0,174,239,.5))}
+.bar{width:220px;height:3px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;margin:auto}
+.bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--blue2));box-shadow:0 0 12px var(--blue);transition:width .2s}
+@keyframes fadeIn{to{opacity:1}}
+
+/* 3. NAVBAR */
+nav{position:fixed;top:16px;left:50%;transform:translateX(-50%);width:min(1200px,94%);z-index:50;
+  display:flex;align-items:center;justify-content:space-between;padding:10px 18px;border-radius:18px;
+  background:rgba(5,7,13,.45);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--line)}
+nav .brand{display:flex;align-items:center;gap:10px;font-family:Sora;font-weight:700}
+nav .brand img{width:44px}
+nav ul{display:flex;gap:28px;list-style:none;font-size:.95rem}
+nav ul a{color:#b9c6d8;transition:color .2s}
+nav ul a:hover{color:#fff}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 26px;border-radius:999px;font-weight:600;cursor:pointer;border:0;font-family:inherit;font-size:.95rem;transition:box-shadow .3s}
+.btn-primary{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;box-shadow:0 0 24px rgba(0,174,239,.45)}
+.btn-primary:hover{box-shadow:0 0 40px rgba(0,174,239,.8)}
+.btn-ghost{background:var(--glass);border:1px solid rgba(255,255,255,.18);color:#fff;backdrop-filter:blur(10px)}
+.menu-btn{display:none;background:none;border:0;color:#fff;font-size:1.6rem;cursor:pointer}
+
+/* 4. HERO */
+#home{min-height:100vh;display:flex;align-items:center;padding:0;overflow:hidden}
+.hero-video{position:absolute;inset:0;width:100%;height:120%;object-fit:cover;z-index:0}
+.hero-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(0,40,120,.35),rgba(5,7,13,.6) 60%,var(--black))}
+/* Hero text pinned to the far left of the page: width:100% + margin:0 override .container's centred 1200px box */
+.hero-content{position:relative;z-index:3;max-width:760px;width:100%;margin:0;padding-left:clamp(20px,4vw,56px)}
+.hero-content h1{font-size:clamp(2.6rem,7.5vw,5.6rem);font-weight:800;margin-bottom:22px}
+.hero-content p{font-size:1.15rem;color:#b9c6d8;max-width:560px;margin-bottom:34px}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap}
+.particles{position:absolute;inset:0;z-index:2;pointer-events:none}
+.particles i{position:absolute;width:6px;height:6px;border-radius:50%;background:var(--blue);box-shadow:0 0 14px var(--blue);opacity:.6;animation:float 8s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-40px);opacity:.2}}
+
+/* 5. SERVICES */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px;margin-top:56px}
+.card{position:relative;padding:34px;border-radius:22px;background:var(--glass);border:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(14px);transition:border-color .3s,box-shadow .3s;transform-style:preserve-3d}
+.card:hover{border-color:var(--line);box-shadow:0 20px 60px -20px rgba(0,174,239,.5)}
+.card .icon{width:54px;height:54px;border-radius:14px;display:grid;place-items:center;margin-bottom:20px;
+  background:linear-gradient(135deg,rgba(0,174,239,.25),rgba(0,87,255,.15));border:1px solid var(--line)}
+.card .icon svg{width:26px;height:26px;stroke:var(--blue)}
+.card h3{font-size:1.25rem;margin-bottom:10px}
+.card p{color:#9fb0c6;font-size:.95rem}
+
+/* 6. OUR WORK: two-row scroll marquee, copied from Jack's portfolio */
+#work{overflow:hidden}
+.marquee{margin-top:56px}
+.marquee-rows{display:flex;flex-direction:column;gap:12px}
+.marquee-row{display:flex;gap:12px;will-change:transform}
+/* max-width:none stops this site's global "img{max-width:100%}" from squeezing the 420px cards on phones */
+.marquee-img{width:420px;height:270px;border-radius:16px;object-fit:cover;flex-shrink:0;max-width:none}
+
+/* 6b. WEBSITE PACKAGES: Basic / Pro / Premium, every sample links to WhatsApp */
+.tier{margin-top:48px;padding:34px;border-radius:26px;background:var(--glass);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(14px)}
+.tier-premium{border-color:var(--line);box-shadow:0 0 60px -25px rgba(0,174,239,.6)}
+.tier-head{display:flex;flex-wrap:wrap;gap:22px;justify-content:space-between;align-items:flex-end;margin-bottom:26px}
+.tier-info{max-width:640px}
+.tier-tag{display:inline-block;font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;color:var(--blue);margin-bottom:10px}
+.tier h3{font-size:clamp(1.6rem,3.4vw,2.2rem);margin-bottom:10px}
+.tier-info p{color:#9fb0c6}
+.tier-info ul{list-style:none;display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:16px;font-size:.92rem;color:#c8d4e4}
+.tier-info li::before{content:"\2713";color:var(--blue);margin-right:8px;font-weight:700}
+.samples{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.sample{position:relative;display:block;border-radius:16px;overflow:hidden;aspect-ratio:420/270;border:1px solid rgba(255,255,255,.08);transition:border-color .3s,box-shadow .3s}
+.sample:hover{border-color:var(--green);box-shadow:0 16px 50px -18px rgba(37,211,102,.55)}
+.sample img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.sample:hover img{transform:scale(1.06)}
+/* label strip is always visible (phones have no hover) */
+.sample-cta{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:space-between;gap:10px;padding:14px 16px;font-size:.88rem;font-weight:600;background:linear-gradient(180deg,transparent 50%,rgba(5,7,13,.92))}
+.sample-cta b{color:var(--green);font-weight:600}
+
+/* 7. PROCESS */
+.steps{position:relative;margin-top:70px;display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.steps svg.line{position:absolute;top:34px;left:0;width:100%;height:4px;overflow:visible}
+.steps .line path{stroke:var(--accent);stroke-width:3;fill:none;filter:drop-shadow(0 0 6px var(--blue))}
+.step{position:relative;text-align:center;padding:0 10px}
+.step .num{width:68px;height:68px;margin:0 auto 20px;border-radius:50%;display:grid;place-items:center;font-family:Sora;font-weight:700;font-size:1.3rem;
+  background:var(--black);border:2px solid var(--blue);box-shadow:0 0 24px rgba(0,174,239,.5)}
+.step h3{margin-bottom:8px}
+.step p{color:#9fb0c6;font-size:.92rem}
+
+/* 8. STATS */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:56px}
+.stat{text-align:center;padding:34px 16px;border-radius:22px;background:var(--glass);border:1px solid rgba(255,255,255,.08)}
+.stat strong{display:block;font-family:Sora;font-size:clamp(2.2rem,5vw,3.2rem)}
+.stat span{color:#9fb0c6}
+
+/* 9. FINAL CTA / WHATSAPP */
+#contact{min-height:100vh;display:flex;align-items:center;text-align:center}
+#contact h2{font-size:clamp(2.4rem,7vw,5rem);margin-bottom:18px;background:linear-gradient(90deg,#fff,var(--green));-webkit-background-clip:text;background-clip:text;color:transparent}
+#contact p{color:#b9d8c4;max-width:560px;margin:0 auto 50px}
+.wa-big{display:inline-flex;flex-direction:column;align-items:center;gap:16px}
+.wa-icon{position:relative;width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--green2));display:grid;place-items:center;box-shadow:0 0 50px rgba(37,211,102,.6)}
+.wa-icon svg{width:64px;height:64px;fill:#fff}
+.wa-icon::before,.wa-icon::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--green);animation:pulse 2.2s infinite}
+.wa-icon::after{animation-delay:1.1s}
+@keyframes pulse{from{transform:scale(1);opacity:.8}to{transform:scale(1.9);opacity:0}}
+.wa-big strong{font-family:Sora;font-size:1.4rem}
+.wa-float{position:fixed;right:22px;bottom:22px;z-index:60;width:58px;height:58px;border-radius:50%;background:var(--green);display:grid;place-items:center;
+  box-shadow:0 0 24px rgba(37,211,102,.6);transform:scale(0);transition:transform .4s cubic-bezier(.34,1.56,.64,1)}
+.wa-float.show{transform:scale(1)}
+.wa-float svg{width:30px;height:30px;fill:#fff}
+
+/* 10. FOOTER */
+footer{position:relative;z-index:2;padding:60px 0 40px;border-top:1px solid rgba(255,255,255,.08)}
+.foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px}
+.foot img{width:90px}
+.foot ul{display:flex;gap:22px;list-style:none;color:#9fb0c6;flex-wrap:wrap}
+.copy{text-align:center;color:#6b7a90;margin-top:30px;font-size:.85rem}
+
+/* 11. ROBOT GUIDE */
+#robot-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:4;pointer-events:none}
+#robot-video-wrap{position:fixed;top:0;left:0;width:170px;height:170px;z-index:4;pointer-events:none;display:none;border-radius:50%;overflow:hidden;
+  box-shadow:0 0 40px rgba(0,174,239,.5);border:1px solid var(--line)}
+#robot-video-wrap video{width:100%;height:100%;object-fit:cover}
+#bubble{position:fixed;top:0;left:0;z-index:5;pointer-events:none;max-width:250px;padding:14px 18px;border-radius:18px;font-size:.92rem;
+  background:rgba(10,20,40,.6);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);box-shadow:0 0 24px rgba(0,174,239,.3);opacity:0;transition:opacity .3s}
+#bubble.on{opacity:1}
+#bubble .caret{display:inline-block;width:2px;height:1em;background:var(--blue);vertical-align:middle;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+
+#cursor{position:fixed;top:0;left:0;width:26px;height:26px;border-radius:50%;border:1.5px solid var(--blue);z-index:99;pointer-events:none;
+  box-shadow:0 0 18px var(--blue);margin:-13px 0 0 -13px;transition:width .2s,height .2s,margin .2s,border-color .3s}
+#cursor.big{width:54px;height:54px;margin:-27px 0 0 -27px}
+
+.reveal{opacity:0;transform:translateY(40px)}
+
+/* 12. RESPONSIVE */
+@media (max-width:900px){
+  nav ul{position:absolute;top:70px;left:0;right:0;flex-direction:column;gap:0;background:rgba(5,7,13,.95);border-radius:16px;border:1px solid var(--line);display:none;padding:10px}
+  nav ul.open{display:flex}
+  nav ul li a{display:block;padding:12px}
+  .menu-btn{display:block}
+  nav > .btn{display:none}
+  .steps{grid-template-columns:1fr 1fr;row-gap:50px}
+  .steps svg.line{display:none}
+  .stats{grid-template-columns:1fr 1fr}
+}
+@media (max-width:560px){
+  section{padding:90px 0}
+  .steps,.stats{grid-template-columns:1fr}
+  #bubble{max-width:180px;font-size:.8rem}
+  #robot-video-wrap{width:110px;height:110px}
+}
+@media (hover:none){#cursor{display:none}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<div id="bg"></div>
+<div id="grain"></div>
+<div id="cursor"></div>
+
+<!-- PRELOADER -->
+<div id="preloader" aria-hidden="true">
+  <div class="pre-inner">
+    <img class="logo-img" src="assets/logo.png" alt="" />
+    <div class="bar"><span id="bar"></span></div>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav aria-label="Main">
+  <a href="#home" class="brand"><img class="logo-img" src="assets/logo.png" alt="Wealth's Tech logo" /> Wealth's Tech</a>
+  <ul id="menu">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#work">Our Work</a></li>
+    <li><a href="#packages">Packages</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="btn btn-primary magnetic">Get Started</a>
+  <button class="menu-btn" id="menuBtn" aria-label="Open menu">&#9776;</button>
+</nav>
+
+<!-- ROBOT LAYERS -->
+<canvas id="robot-canvas" aria-hidden="true"></canvas>
+<div id="robot-video-wrap" aria-hidden="true">
+  <video src="assets/robot-spin.mp4" muted loop playsinline preload="none"></video>
+</div>
+<div id="bubble" role="status" aria-live="polite"><span id="bubbleText"></span><span class="caret"></span></div>
+
+<main>
+<!-- HERO -->
+<section id="home" data-say="Welcome to Wealth's Tech! I'm your guide. Let me show you around.">
+  <video class="hero-video" id="heroVideo" src="assets/stars.mp4" autoplay muted loop playsinline></video>
+  <div class="hero-overlay"></div>
+  <div class="particles" id="particles"></div>
+  <div class="container hero-content">
+    <p class="eyebrow">Web Development Studio</p>
+    <h1 id="heroTitle"><span class="sin grad-text" data-text="We build the web." data-delay="200">We build the web.</span><br/><span class="sin" data-text="You build the wealth." data-delay="1100">You build the wealth.</span></h1>
+    <p>Websites, web apps, domains, hosting and a powerful Google presence, so customers find you and your business grows.</p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn btn-primary magnetic">Start Your Project</a>
+      <a href="#work" class="btn btn-ghost magnetic">See Our Work</a>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" data-say="Here's everything we can do for your business.">
+  <div class="container">
+    <p class="eyebrow reveal">Services</p>
+    <h2 class="section-title reveal">Everything you need to <span class="grad-text">win online</span></h2>
+    <p class="section-sub reveal">From the first line of code to the first customer that finds you on Google.</p>
+    <div class="grid" id="servicesGrid"></div>
+  </div>
+</section>
+
+<!-- OUR WORK -->
+<section id="work" data-say="Check out some of the sites we've built.">
+  <div class="container">
+    <p class="eyebrow reveal">Our Work</p>
+    <h2 class="section-title reveal">Sites that <span class="grad-text">work hard</span></h2>
+    <p class="section-sub reveal">A look at the kind of websites we design and build.</p>
+  </div>
+  <div id="marquee" class="marquee">
+    <div class="marquee-rows">
+      <div id="row1" class="marquee-row"></div>
+      <div id="row2" class="marquee-row"></div>
+    </div>
+  </div>
+</section>
+
+<!-- WEBSITE PACKAGES -->
+<section id="packages" data-say="Pick Basic, Pro or Premium, then tap any sample to chat with us on WhatsApp.">
+  <div class="container">
+    <p class="eyebrow reveal">Website Packages</p>
+    <h2 class="section-title reveal">The site that <span class="grad-text">fits your business</span></h2>
+    <p class="section-sub reveal">Basic, Pro or Premium. Tap any sample and we'll continue the conversation on WhatsApp.</p>
+    <div id="tiers"></div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process" data-say="Simple steps from idea to launch.">
+  <div class="container">
+    <p class="eyebrow reveal">Process</p>
+    <h2 class="section-title reveal">From idea to <span class="grad-text">launch</span></h2>
+    <div class="steps">
+      <svg class="line" viewBox="0 0 100 4" preserveAspectRatio="none"><path id="procLine" d="M12 2 L88 2" /></svg>
+      <div class="step reveal"><div class="num">01</div><h3>Discovery</h3><p>We learn your business, goals and customers.</p></div>
+      <div class="step reveal"><div class="num">02</div><h3>Design</h3><p>Beautiful, on-brand layouts you approve.</p></div>
+      <div class="step reveal"><div class="num">03</div><h3>Development</h3><p>Fast, secure, mobile-first build.</p></div>
+      <div class="step reveal"><div class="num">04</div><h3>Launch &amp; Grow</h3><p>Domain, hosting, Google setup and growth.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section id="why" data-say="Numbers don't lie. Clients love working with us.">
+  <div class="container">
+    <p class="eyebrow reveal">Why Choose Us</p>
+    <h2 class="section-title reveal">Trusted to <span class="grad-text">deliver</span></h2>
+    <div class="stats">
+      <div class="stat reveal"><strong data-count="120">0</strong><span>Projects Delivered</span></div>
+      <div class="stat reveal"><strong data-count="95">0</strong><span>Happy Clients</span></div>
+      <div class="stat reveal"><strong data-count="5">0</strong><span>Years Experience</span></div>
+      <div class="stat reveal"><strong data-count="24" data-suffix="/7">0</strong><span>Support</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" data-say="Ready to grow? Let's talk!">
+  <div class="container">
+    <p class="eyebrow reveal" style="color:var(--green)">Let's Build Together</p>
+    <h2 class="reveal">Chat us on WhatsApp</h2>
+    <p class="reveal">Tell us about your idea. We'll reply fast with a plan and a quote.</p>
+    <a class="wa-big" id="waBig" target="_blank" rel="noopener" aria-label="Chat with Wealth's Tech on WhatsApp">
+      <strong>Chat us now</strong>
+      <span class="wa-icon"><svg viewBox="0 0 32 32"><path d="M16 3C8.8 3 3 8.7 3 15.8c0 2.5.7 4.9 2 7L3 29l6.4-2c2 1.1 4.3 1.7 6.6 1.7 7.2 0 13-5.7 13-12.8S23.2 3 16 3zm0 23.4c-2.1 0-4.1-.6-5.9-1.7l-.4-.3-3.8 1.2 1.2-3.7-.3-.4c-1.200-1.8-1.8-3.8-1.8-5.9C5 9.9 9.9 5.1 16 5.1S27 9.900 27 15.8 22.1 26.4 16 26.4zm6-7.9c-.3-.2-2-1-2.3-1.1-.3-.1-.5-.2-.8.2-.2.3-.9 1.1-1.1 1.3-.2.2-.4.2-.7.1-.3-.2-1.4-.5-2.7-1.7-1-.9-1.7-2-1.9-2.3-.2-.3 0-.5.1-.7l.5-.6c.2-.2.2-.4.3-.6.1-.2 0-.4 0-.6l-1-2.5c-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.4 1.4 3.6c.2.2 2.4 3.7 5.9 5.1 2.9 1.1 3.5.9 4.1.9.6-.1 2-.8 2.3-1.6.3-.8.3-1.5.2-1.6-.1-.3-.4-.4-.7-.5z"/></svg></span>
+    </a>
+  </div>
+</section>
+</main>
+
+<a class="wa-float" id="waFloat" target="_blank" rel="noopener" aria-label="WhatsApp us">
+  <svg viewBox="0 0 32 32"><path d="M16 3C8.8 3 3 8.7 3 15.8c0 2.5.7 4.9 2 7L3 29l6.4-2c2 1.1 4.3 1.7 6.6 1.7 7.2 0 13-5.7 13-12.8S23.2 3 16 3zm6 15.5c-.3-.2-2-1-2.3-1.1-.3-.1-.5-.2-.8.2-.2.3-.9 1.1-1.1 1.3-.2.2-.4.2-.7.1-.3-.2-1.4-.5-2.7-1.7-1-.9-1.7-2-1.9-2.3-.2-.3 0-.5.1-.7l.5-.6c.2-.2.2-.4.3-.6.1-.2 0-.4 0-.6l-1-2.5c-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.4 1.4 3.6c.2.2 2.4 3.7 5.9 5.1 2.9 1.1 3.5.9 4.1.9.6-.1 2-.8 2.3-1.6.3-.8.3-1.5.2-1.6-.1-.3-.4-.4-.7-.5z"/></svg>
+</a>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="foot">
+      <img class="logo-img" src="assets/logo.png" alt="Wealth's Tech logo" />
+      <ul>
+        <li><a href="#home">Home</a></li><li><a href="#services">Services</a></li>
+        <li><a href="#work">Our Work</a></li><li><a href="#packages">Packages</a></li><li><a href="#process">Process</a></li><li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <p class="copy">© 2026 Wealth's Tech. We build the web. You build the wealth.</p>
+  </div>
+</footer>
+
+<!-- LIBRARIES (CDN) -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+}}
+</script>
+
+<!-- MAIN SCRIPT -->
+<script>
+/* ---------- CONFIG ---------- */
+const WA_NUMBER = "2348069662975";   /* 08069662975 in international format: drop the 0, add Nigeria's 234 */
+const waLink = msg => `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
+const WA_URL = waLink("Hello Wealth's Tech, I would like to build a website.");
+const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const IS_MOBILE = innerWidth < 768;
+
+const SERVICES = [
+  ["Web App Development","Custom dashboards, portals and SaaS tools built to scale.",'<path d="M4 5h16v11H4z M8 20h8 M12 16v4"/>'],
+  ["Website Design","Premium, mobile-first websites that turn visitors into customers.",'<path d="M3 4h18v16H3z M3 9h18"/>'],
+  ["Domain Registration & Assignment","We find, register and connect the perfect name for your brand.",'<circle cx="12" cy="12" r="9"/><path d="M3 12h18 M12 3c3 3 3 15 0 18 M12 3c-3 3-3 15 0 18"/>'],
+  ["Hosting & Deployment","Fast, secure hosting with SSL, backups and smooth launches.",'<path d="M4 4h16v6H4z M4 14h16v6H4z"/>'],
+  ["Google Search Optimization (SEO)","Rank higher, get found and bring in customers ready to buy.",'<circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5"/>'],
+  ["Google Business Profile & Maps","Show up on Google Maps with reviews, hours and directions.",'<path d="M12 21s-7-6.5-7-12a7 7 0 0114 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/>'],
+];
+
+/* OUR WORK: website previews (same list and order as Jack's portfolio) */
+const MARQUEE_IMGS = [
+  "https://motionsites.ai/assets/hero-space-voyage-preview-eECLH3Yc.gif",
+  "https://motionsites.ai/assets/hero-codenest-preview-Cgppc2qV.gif",
+  "https://motionsites.ai/assets/hero-vex-ventures-preview-BczMFIiw.gif",
+  "https://motionsites.ai/assets/hero-stellar-ai-v2-preview-DjvxjG3C.gif",
+  "https://motionsites.ai/assets/hero-asme-preview-B_nGDnTP.gif",
+  "https://motionsites.ai/assets/hero-transform-data-preview-Cx5OU29N.gif",
+  "https://motionsites.ai/assets/hero-vitara-preview-Cjz2QYyU.gif",
+  "https://motionsites.ai/assets/hero-terra-preview-BFjrCr7T.gif",
+  "https://motionsites.ai/assets/hero-skyelite-preview-DHaZIgUv.gif",
+  "https://motionsites.ai/assets/hero-aethera-preview-DknSlcTa.gif",
+  "https://motionsites.ai/assets/hero-designpro-preview-D8c5_een.gif",
+  "https://motionsites.ai/assets/hero-stellar-ai-preview-D3HL6bw1.gif",
+  "https://motionsites.ai/assets/hero-xportfolio-preview-D4A8maiC.gif",
+  "https://motionsites.ai/assets/hero-orbit-web3-preview-BXt4OttD.gif",
+  "https://motionsites.ai/assets/hero-nexora-preview-cx5HmUgo.gif",
+  "https://motionsites.ai/assets/hero-evr-ventures-preview-DZxeVFEX.gif",
+  "https://motionsites.ai/assets/hero-planet-orbit-preview-DWAP8Z1P.gif",
+  "https://motionsites.ai/assets/hero-new-era-preview-CocuDUm9.gif",
+  "https://motionsites.ai/assets/hero-wealth-preview-B70idl_u.gif",
+  "https://motionsites.ai/assets/hero-luminex-preview-CxOP7ce6.gif",
+  "https://motionsites.ai/assets/hero-celestia-preview-0yO3jXO8.gif"
+];
+
+/* ---------- RENDER ---------- */
+document.getElementById("servicesGrid").innerHTML = SERVICES.map(([t,d,i])=>`
+  <article class="card reveal tilt"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${i}</svg></div>
+  <h3>${t}</h3><p>${d}</p></article>`).join("");
+
+/* Each row is tripled so the strip is always long enough to cover the screen while it slides */
+function fillRow(el, imgs) {
+  const tripled = [...imgs, ...imgs, ...imgs];
+  el.innerHTML = tripled.map(src => `<img class="marquee-img" loading="lazy" src="${src}" alt="Website preview" />`).join("");
+}
+const marqueeEl = document.getElementById("marquee");
+const row1 = document.getElementById("row1");
+const row2 = document.getElementById("row2");
+fillRow(row1, MARQUEE_IMGS.slice(0, 11));
+fillRow(row2, MARQUEE_IMGS.slice(11));
+
+/* Scroll-driven slide: row 1 drifts right, row 2 drifts left (same maths as Jack's page) */
+function onMarqueeScroll() {
+  const rect = marqueeEl.getBoundingClientRect();
+  const sectionTop = rect.top + window.scrollY;
+  const offset = (window.scrollY - sectionTop + window.innerHeight) * 0.3;
+  row1.style.transform = `translateX(${offset - 200}px)`;
+  row2.style.transform = `translateX(${-(offset - 200)}px)`;
+}
+window.addEventListener("scroll", onMarqueeScroll, { passive: true });
+window.addEventListener("resize", onMarqueeScroll);
+onMarqueeScroll();
+
+/* WEBSITE PACKAGES: edit the text here; "samples" are motionsites.ai preview images, 3 per package */
+const MS = "https://motionsites.ai/assets/";
+const TIERS = [
+  { name:"Basic", tag:"Get online fast",
+    desc:"A clean, fast and simple website that puts your business online and makes it easy for customers to reach you.",
+    perks:["Simple 1 to 3 page site","Mobile friendly","WhatsApp contact button"],
+    samples:["hero-codenest-preview-Cgppc2qV.gif","hero-asme-preview-B_nGDnTP.gif","hero-vitara-preview-Cjz2QYyU.gif"] },
+  { name:"Pro", tag:"Look sharp, grow faster",
+    desc:"A polished multi-page website with smooth animations, built to impress visitors and turn them into customers.",
+    perks:["Multi-page website","Smooth animations","Domain, hosting and SEO setup"],
+    samples:["hero-vex-ventures-preview-BczMFIiw.gif","hero-stellar-ai-v2-preview-DjvxjG3C.gif","hero-nexora-preview-cx5HmUgo.gif"] },
+  { name:"Premium", tag:"Stand out completely", premium:true,
+    desc:"A fully custom, cinematic experience with 3D visuals and scroll-driven motion that people remember.",
+    perks:["Custom 3D and scroll animations","Unique brand design","Priority support"],
+    samples:["hero-space-voyage-preview-eECLH3Yc.gif","hero-planet-orbit-preview-DWAP8Z1P.gif","hero-orbit-web3-preview-BXt4OttD.gif"] }
+];
+
+/* Every card and button is a plain <a> to wa.me with a message that names the package (and style), so the chat opens already filled in */
+document.getElementById("tiers").innerHTML = TIERS.map(t => `
+  <div class="tier reveal${t.premium ? " tier-premium" : ""}">
+    <div class="tier-head">
+      <div class="tier-info">
+        <span class="tier-tag">${t.tag}</span>
+        <h3>${t.name} <span class="grad-text">Website</span></h3>
+        <p>${t.desc}</p>
+        <ul>${t.perks.map(x => `<li>${x}</li>`).join("")}</ul>
+      </div>
+      <a class="btn btn-primary" target="_blank" rel="noopener"
+         href="${waLink(`Hello Wealth's Tech, I'm interested in the ${t.name} website package. Can we talk about it?`)}">Chat about ${t.name}</a>
+    </div>
+    <div class="samples">
+      ${t.samples.map((f, i) => `
+        <a class="sample" target="_blank" rel="noopener" aria-label="${t.name} website, style ${i + 1}: chat on WhatsApp"
+           href="${waLink(`Hello Wealth's Tech, I like ${t.name} website style ${i + 1} and I'd like something like it. Can we talk?`)}">
+          <img loading="lazy" src="${MS + f}" alt="${t.name} website sample ${i + 1}" />
+          <span class="sample-cta"><span>${t.name} &middot; Style ${i + 1}</span><b>WhatsApp &rarr;</b></span>
+        </a>`).join("")}
+    </div>
+  </div>`).join("");
+
+const waFloat=document.getElementById("waFloat");
+document.getElementById("waBig").href = WA_URL; waFloat.href = WA_URL;
+
+const pc = document.getElementById("particles");
+for(let i=0;i<(IS_MOBILE?12:28);i++){
+  const s=document.createElement("i");
+  s.style.left=Math.random()*100+"%"; s.style.top=Math.random()*100+"%";
+  s.style.animationDelay=-Math.random()*8+"s";
+  pc.appendChild(s);
+}
+
+document.getElementById("menuBtn").onclick=()=>document.getElementById("menu").classList.toggle("open");
+document.querySelectorAll("#menu a").forEach(a=>a.addEventListener("click",()=>document.getElementById("menu").classList.remove("open")));
+
+/* ---------- PRELOADER ---------- */
+let pct=0; const barEl=document.getElementById("bar");
+const preTick=setInterval(()=>{pct=Math.min(95,pct+Math.random()*18);barEl.style.width=pct+"%";},120);
+function hidePreloader(){
+  clearInterval(preTick); barEl.style.width="100%";
+  setTimeout(()=>{document.getElementById("preloader").classList.add("done");introAnim();},400);
+}
+window.addEventListener("load",hidePreloader,{once:true});
+setTimeout(hidePreloader,6000); /* safety: never stuck */
+
+/* ---------- LENIS + GSAP ---------- */
+gsap.registerPlugin(ScrollTrigger);
+let lenis=null;
+if(!REDUCED && window.Lenis){
+  lenis=new Lenis({duration:1.15,smoothWheel:true});
+  lenis.on("scroll",ScrollTrigger.update);
+  gsap.ticker.add(t=>lenis.raf(t*1000)); gsap.ticker.lagSmoothing(0);
+}
+document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener("click",e=>{
+  const t=document.querySelector(a.getAttribute("href")); if(!t) return;
+  e.preventDefault(); lenis ? lenis.scrollTo(t,{offset:-20}) : t.scrollIntoView({behavior:"smooth"});
+}));
+
+let introDone=false;
+/* ---------- SCRAMBLE-IN TEXT (copied from synapsex.html) ----------
+   Letters reveal left to right; the 3 letters just ahead of the reveal flicker as random characters. */
+const SCRAMBLE_CHARS="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+~|}{[]:;?><";
+const rndChar=()=>SCRAMBLE_CHARS[Math.floor(Math.random()*SCRAMBLE_CHARS.length)];
+function scrambleIn(el,onDone){
+  const t=el.dataset.text, d=+el.dataset.delay||0;
+  el.textContent="\u00a0";                      /* blank (keeps the line height) until its turn */
+  setTimeout(()=>{
+    let p=0;
+    const id=setInterval(()=>{
+      p+=0.5; let out="";
+      for(let i=0;i<t.length;i++){
+        if(t[i]===" "){out+=" ";continue}
+        if(i<Math.floor(p)) out+=t[i];            /* already revealed */
+        else if(i<Math.floor(p)+3) out+=rndChar();/* flickering ahead of the reveal */
+      }
+      el.textContent=out||"\u00a0";
+      if(p>=t.length){clearInterval(id);el.textContent=t;if(onDone)onDone();}
+    },25);
+  },d);
+}
+
+function introAnim(){
+  if(REDUCED||introDone) return; introDone=true;
+  /* Scramble the headline. Lock the h1 height first so the buttons below don't jump while the text is being typed. */
+  const title=document.getElementById("heroTitle"), lines=title.querySelectorAll(".sin");
+  title.style.minHeight=title.offsetHeight+"px";
+  let left=lines.length;
+  lines.forEach(el=>scrambleIn(el,()=>{ if(--left===0) title.style.minHeight=""; }));
+  gsap.from(".hero-content > p, .hero-btns",{y:30,opacity:0,duration:1,stagger:.15,delay:.3});
+}
+
+if(!REDUCED){
+  ScrollTrigger.batch(".reveal",{start:"top 88%",onEnter:b=>gsap.to(b,{opacity:1,y:0,stagger:.1,duration:.9,ease:"power3.out"})});
+}
+
+const hv=document.getElementById("heroVideo");
+if(!REDUCED) gsap.to(hv,{yPercent:15,ease:"none",scrollTrigger:{trigger:"#home",start:"top top",end:"bottom top",scrub:true}});
+ScrollTrigger.create({trigger:"#home",start:"top top",end:"bottom top",onLeave:()=>hv.pause(),onEnterBack:()=>hv.play().catch(()=>{})});
+
+const pl=document.getElementById("procLine"); const len=pl.getTotalLength();
+pl.style.strokeDasharray=len; pl.style.strokeDashoffset=len;
+gsap.to(pl,{strokeDashoffset:0,ease:"none",scrollTrigger:{trigger:"#process",start:"top 70%",end:"center 50%",scrub:true}});
+
+document.querySelectorAll("[data-count]").forEach(el=>{
+  const o={v:0},end=+el.dataset.count,suf=el.dataset.suffix||"+";
+  ScrollTrigger.create({trigger:el,start:"top 90%",once:true,onEnter:()=>gsap.to(o,{v:end,duration:2,ease:"power2.out",onUpdate:()=>el.textContent=Math.round(o.v)+suf})});
+});
+
+/* Blue -> green background, tied to scroll */
+ScrollTrigger.create({trigger:"#why",start:"top center",endTrigger:"#contact",end:"center center",scrub:true,
+  onUpdate:s=>document.documentElement.style.setProperty("--bg-mix",s.progress.toFixed(3))});
+
+gsap.from(".wa-big",{y:200,opacity:0,scale:.4,duration:1.6,ease:"elastic.out(1,.45)",scrollTrigger:{trigger:"#contact",start:"top 50%"}});
+
+ScrollTrigger.create({trigger:"#home",start:"bottom 60%",onEnter:()=>waFloat.classList.add("show"),onLeaveBack:()=>waFloat.classList.remove("show")});
+
+/* Desktop-only: tilt, magnetic, cursor */
+if(matchMedia("(hover:hover)").matches && !REDUCED){
+  document.querySelectorAll(".tilt").forEach(c=>{
+    c.addEventListener("mousemove",e=>{const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+      gsap.to(c,{rotateY:x*12,rotateX:-y*12,transformPerspective:800,duration:.4});});
+    c.addEventListener("mouseleave",()=>gsap.to(c,{rotateX:0,rotateY:0,duration:.6}));
+  });
+  document.querySelectorAll(".magnetic").forEach(m=>{
+    m.addEventListener("mousemove",e=>{const r=m.getBoundingClientRect();gsap.to(m,{x:(e.clientX-r.left-r.width/2)*.25,y:(e.clientY-r.top-r.height/2)*.25,duration:.4});});
+    m.addEventListener("mouseleave",()=>gsap.to(m,{x:0,y:0,duration:.6,ease:"elastic.out(1,.4)"}));
+  });
+  const cur=document.getElementById("cursor");
+  addEventListener("mousemove",e=>gsap.to(cur,{x:e.clientX,y:e.clientY,duration:.15}));
+  document.querySelectorAll("a,button,.card").forEach(el=>{el.addEventListener("mouseenter",()=>cur.classList.add("big"));el.addEventListener("mouseleave",()=>cur.classList.remove("big"));});
+  ScrollTrigger.create({trigger:"#contact",start:"top center",onEnter:()=>cur.style.borderColor="#25D366",onLeaveBack:()=>cur.style.borderColor=""});
+} else { document.getElementById("cursor").style.display="none"; }
+
+/* ---------- ROBOT PATH (shared by 3D model and video fallback) ----------
+   Scroll progress 0..1 is scrubbed by GSAP; x = sine zigzag, y drifts down + idle bob. */
+const ZIG = IS_MOBILE ? 0.28 : 0.36;
+const robotTarget={p:0};
+gsap.to(robotTarget,{p:1,ease:"none",scrollTrigger:{trigger:"main",start:"top top",end:"bottom bottom",scrub:1.2}});
+
+const bubble=document.getElementById("bubble"),bt=document.getElementById("bubbleText");
+let typeTimer, lastMsg="";
+function say(msg){
+  if(msg===lastMsg) return; lastMsg=msg;
+  clearInterval(typeTimer); bt.textContent=""; bubble.classList.add("on"); let i=0;
+  typeTimer=setInterval(()=>{bt.textContent=msg.slice(0,++i); if(i>=msg.length)clearInterval(typeTimer);},28);
+}
+document.querySelectorAll("[data-say]").forEach(sec=>{
+  ScrollTrigger.create({trigger:sec,start:"top 55%",end:"bottom 55%",onEnter:()=>say(sec.dataset.say),onEnterBack:()=>say(sec.dataset.say)});
+});
+setTimeout(()=>say(document.getElementById("home").dataset.say),1600);
+
+function robotScreenPos(){
+  const p=robotTarget.p, W=innerWidth, H=innerHeight;
+  const zig=Math.sin(p*Math.PI*5);
+  const x=W/2 + zig*W*ZIG;
+  const y=H*(0.45 + p*0.25) + (REDUCED?0:Math.sin(performance.now()/600)*10);
+  const dir=Math.cos(p*Math.PI*5);
+  return {x,y,dir,p};
+}
+function placeBubble(x,y,size){
+  const left = x > innerWidth/2 ? x - size/2 - 260 : x + size/2 + 10;
+  bubble.style.transform=`translate(${Math.max(8,Math.min(innerWidth-260,left))}px,${Math.max(80,y-size/2-20)}px)`;
+}
+
+let fallbackOn=false;
+function startVideoFallback(){
+  if(fallbackOn) return; fallbackOn=true;
+  const wrap=document.getElementById("robot-video-wrap"),v=wrap.querySelector("video");
+  document.getElementById("robot-canvas").style.display="none";
+  wrap.style.display="block"; v.play().catch(()=>{});
+  gsap.ticker.add(()=>{
+    const size=wrap.offsetWidth, s=robotScreenPos();
+    wrap.style.transform=`translate(${s.x-size/2}px,${s.y-size/2}px) scaleX(${s.dir>=0?1:-1})`;
+    placeBubble(s.x,s.y,size);
+  });
+}
+window.startVideoFallback=startVideoFallback;
+window.robotScreenPos=robotScreenPos;
+window.placeBubble=placeBubble;
+/* If the 3D module never loads (offline / old browser), use the video */
+setTimeout(()=>{ if(!window.robot3DReady) startVideoFallback(); },8000);
+</script>
+
+<!-- THREE.JS ROBOT: loads assets/robot.glb, falls back to the video if missing -->
+<script type="module">
+import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+
+const canvas=document.getElementById("robot-canvas");
+let renderer;
+try{ renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true}); }
+catch(e){ window.startVideoFallback(); }
+
+if(renderer){
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.setSize(innerWidth,innerHeight);
+  renderer.outputColorSpace=THREE.SRGBColorSpace;
+
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(35,innerWidth/innerHeight,.1,100);
+  camera.position.set(0,0,10);
+
+  scene.add(new THREE.AmbientLight(0xffffff,.6));
+  const key=new THREE.DirectionalLight(0xffffff,2.2); key.position.set(3,4,5); scene.add(key);
+  const rim=new THREE.DirectionalLight(0x00aeef,3); rim.position.set(-4,2,-4); scene.add(rim);
+  const glow=new THREE.PointLight(0x0057ff,8,10); glow.position.set(0,-1,2); scene.add(glow);
+
+  const holder=new THREE.Group(); scene.add(holder);
+  let mixer=null, loaded=false;
+
+  new GLTFLoader().load("assets/robot.glb",gltf=>{
+    const m=gltf.scene;
+    const box=new THREE.Box3().setFromObject(m), size=box.getSize(new THREE.Vector3()), c=box.getCenter(new THREE.Vector3());
+    m.position.sub(c); m.scale.setScalar((innerWidth<768?1.4:2.0)/Math.max(size.x,size.y,size.z));
+    holder.add(m);
+    if(gltf.animations.length){mixer=new THREE.AnimationMixer(m);mixer.clipAction(gltf.animations[0]).play();}
+    loaded=true; window.robot3DReady=true;
+  },undefined,()=>window.startVideoFallback());
+
+  function toWorld(x,y){
+    const v=new THREE.Vector3((x/innerWidth)*2-1,-(y/innerHeight)*2+1,.5).unproject(camera);
+    const d=v.sub(camera.position).normalize(), t=-camera.position.z/d.z;
+    return camera.position.clone().add(d.multiplyScalar(t));
+  }
+
+  const clock=new THREE.Clock();
+  function loop(){
+    requestAnimationFrame(loop);
+    const dt=Math.min(clock.getDelta(),.05);
+    if(document.hidden||!loaded) return;
+    const s=window.robotScreenPos(), w=toWorld(s.x,s.y);
+    holder.position.lerp(w,1-Math.exp(-8*dt));
+    holder.rotation.y += (s.dir*0.9-holder.rotation.y)*(1-Math.exp(-5*dt));
+    holder.rotation.z = -s.dir*0.08;
+    if(mixer) mixer.update(dt);
+    window.placeBubble(s.x,s.y,innerWidth<768?110:170);
+    renderer.render(scene,camera);
+  }
+  loop();
+  addEventListener("resize",()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
+}
+</script>
+</body>
+</html>
