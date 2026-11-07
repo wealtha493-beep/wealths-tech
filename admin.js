@@ -6,6 +6,7 @@
  const validUrl=value=>{try{const u=new URL(value);return ['https:','http:'].includes(u.protocol)}catch{return false}};
  async function checkSession(){const {data:{session}}=await db.auth.getSession();if(session)await enter(session.user);}
  async function enter(user){currentUser=user;const {data:profile,error}=await db.from('admin_profiles').select('is_admin').eq('user_id',user.id).maybeSingle();if(error||!profile?.is_admin){await db.auth.signOut();currentUser=null;say('login-message','This account is not authorised as an administrator.');return;}$('login-panel').classList.add('hidden');$('dashboard').classList.remove('hidden');$('logout').classList.remove('hidden');await loadProjects();}
+ $('toggle-password').addEventListener('click',()=>{const input=$('password'),show=input.type==='password';input.type=show?'text':'password';$('toggle-password').textContent=show?'Hide':'Show';$('toggle-password').setAttribute('aria-label',show?'Hide password':'Show password');$('toggle-password').setAttribute('aria-pressed',String(show));});
  $('login-form').addEventListener('submit',async e=>{e.preventDefault();say('login-message','Signing in…');const {data,error}=await db.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(error){say('login-message',error.message);return;}await enter(data.user);});
  $('logout').addEventListener('click',async()=>{await db.auth.signOut();location.reload();});
  $('refresh').addEventListener('click',loadProjects);$('reset-form').addEventListener('click',resetForm);
