@@ -733,7 +733,11 @@ function robotScreenPos(){
 if(matchMedia("(hover:hover) and (pointer:fine)").matches){
   const ping=document.getElementById("ping");
   document.addEventListener("click",e=>{
+<<<<<<< HEAD
     if(e.target.closest("a,button,input,textarea,select,label,nav,.card,#joy,#leaveModal")) return;
+=======
+    if(e.target.closest("a,button,input,textarea,select,label,nav,.card,#joy")) return;
+>>>>>>> a1a13de9c8376846713bc039bfe9231c0bbed6ee
     if(String(getSelection())) return;      // user was selecting text, not steering
     enterManual();
     ctl.anchor=scrollY; ctl.tx=e.clientX; ctl.ty=e.clientY; clampXY();
