@@ -109,6 +109,32 @@ nav ul a:hover{color:#fff}
 /* max-width:none stops this site's global "img{max-width:100%}" from squeezing the 420px cards on phones */
 .marquee-img{width:420px;height:270px;border-radius:16px;object-fit:cover;flex-shrink:0;max-width:none}
 
+/* 6c. LIVE SITES (added from admin.html) + "you are leaving" notice */
+.live-wrap{margin-top:70px}
+.live-title{font-size:clamp(1.4rem,3vw,2rem);margin-bottom:8px}
+.live-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;margin-top:28px}
+.live-card{display:block;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;padding:0;border-radius:20px;overflow:hidden;background:var(--glass);border:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:transform .3s,border-color .3s,box-shadow .3s;animation:liveIn .6s both}
+.live-card:hover,.live-card:focus-visible{transform:translateY(-6px);border-color:var(--blue);box-shadow:0 18px 50px -20px rgba(0,174,239,.6);outline:none}
+.live-shot{aspect-ratio:420/270;display:grid;place-items:center;background:linear-gradient(135deg,var(--blue2),#0b1b3d);font-family:Sora,sans-serif;font-size:3rem;color:#fff;overflow:hidden}
+.live-shot img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.live-card:hover .live-shot img{transform:scale(1.06)}
+.live-body{padding:18px 20px 20px}
+.live-body h4{font-size:1.1rem;margin-bottom:4px}
+.live-host{font-size:.8rem;color:var(--blue);margin-bottom:8px;word-break:break-all}
+.live-body p{color:#9fb0c6;font-size:.9rem}
+.live-visit{display:inline-block;margin-top:12px;font-size:.85rem;font-weight:600;color:#fff}
+@keyframes liveIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.leave{position:fixed;inset:0;z-index:95;display:none;place-items:center;padding:20px;background:rgba(5,7,13,.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.leave.on{display:grid}
+.leave-box{width:min(460px,100%);padding:34px 30px;border-radius:24px;text-align:center;background:rgba(10,20,40,.85);border:1px solid var(--line);box-shadow:0 0 60px -20px rgba(0,174,239,.7);animation:liveIn .35s both}
+.leave-icon{width:56px;height:56px;margin:0 auto 18px;border-radius:50%;display:grid;place-items:center;font-size:1.6rem;background:linear-gradient(135deg,var(--blue),var(--blue2));box-shadow:0 0 30px rgba(0,174,239,.6)}
+.leave-box h3{font-size:1.4rem;margin-bottom:12px}
+.leave-box p{color:#b9c7da;font-size:.95rem}
+.leave-box strong{color:#fff}
+.leave-note{margin-top:10px;font-size:.85rem;color:#8798b0}
+.leave-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:24px}
+
 /* 6b. WEBSITE PACKAGES: Basic / Pro / Premium, every sample links to WhatsApp */
 .tier{margin-top:48px;padding:34px;border-radius:26px;background:var(--glass);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(14px)}
 .tier-premium{border-color:var(--line);box-shadow:0 0 60px -25px rgba(0,174,239,.6)}
@@ -184,6 +210,19 @@ footer{position:relative;z-index:2;padding:60px 0 40px;border-top:1px solid rgba
 
 .reveal{opacity:0;transform:translateY(40px)}
 
+/* 11b. ROBOT MANUAL CONTROL (joystick on touch, click-to-move on mouse) */
+#joy{position:fixed;left:18px;bottom:22px;z-index:60;width:110px;height:110px;border-radius:50%;display:none;touch-action:none;user-select:none;-webkit-user-select:none;
+  background:rgba(10,20,40,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);box-shadow:0 0 24px rgba(0,174,239,.3)}
+#joy .knob{position:absolute;left:50%;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#4cc9ff,#0057ff);box-shadow:0 0 18px var(--blue);will-change:transform}
+#joyGuide{position:fixed;left:18px;bottom:142px;z-index:60;display:none;padding:8px 14px;border-radius:999px;font:inherit;font-size:.8rem;color:#fff;cursor:pointer;
+  background:rgba(10,20,40,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line)}
+#joyGuide.on{display:block}
+#ping{position:fixed;top:0;left:0;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;border:2px solid var(--blue);z-index:5;pointer-events:none;opacity:0}
+#ping.go{animation:ping .7s ease-out}
+@keyframes ping{0%{opacity:.9;transform:scale(.4)}100%{opacity:0;transform:scale(3)}}
+@media (hover:none) and (pointer:coarse){#joy{display:block}}
+
 /* 12. RESPONSIVE */
 @media (max-width:900px){
   nav ul{position:absolute;top:70px;left:0;right:0;flex-direction:column;gap:0;background:rgba(5,7,13,.95);border-radius:16px;border:1px solid var(--line);display:none;padding:10px}
@@ -243,7 +282,22 @@ footer{position:relative;z-index:2;padding:60px 0 40px;border-top:1px solid rgba
   <video src="assets/robot-spin.mp4" muted loop playsinline preload="none"></video>
 </div>
 <div id="bubble" role="status" aria-live="polite"><span id="bubbleText"></span><span class="caret"></span></div>
+<div id="ping" aria-hidden="true"></div>
+<div id="joy" aria-label="Move the guide robot"><div class="knob" id="joyKnob"></div></div>
+<button id="joyGuide" type="button">&#8634; Guide me</button>
 
+<div id="leaveModal" class="leave" role="dialog" aria-modal="true" aria-labelledby="leaveTitle" aria-hidden="true">
+  <div class="leave-box">
+    <div class="leave-icon" aria-hidden="true">&#8599;</div>
+    <h3 id="leaveTitle">You are leaving this page</h3>
+    <p>You are about to be taken to a completely different website: <strong id="leaveName"></strong> (<span id="leaveHost"></span>).</p>
+    <p class="leave-note">It opens in a new tab and is a separate site, not part of Wealth's Tech. Your tab with us stays open, so you can come back anytime.</p>
+    <div class="leave-actions">
+      <button type="button" id="leaveStay" class="btn btn-ghost">Stay here</button>
+      <a id="leaveGo" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Continue to site</a>
+    </div>
+  </div>
+</div>
 <main>
 <!-- HERO -->
 <section id="home" data-say="Welcome to Wealth's Tech! I'm your guide. Let me show you around.">
@@ -283,6 +337,13 @@ footer{position:relative;z-index:2;padding:60px 0 40px;border-top:1px solid rgba
       <div id="row1" class="marquee-row"></div>
       <div id="row2" class="marquee-row"></div>
     </div>
+  </div>
+  <!-- Filled from the database by admin.html; stays hidden until there is at least one site -->
+  <div class="container live-wrap" id="liveWrap" hidden>
+    <p class="eyebrow">Live websites</p>
+    <h3 class="live-title">Visit sites we have <span class="grad-text">built</span></h3>
+    <p class="section-sub">Tap any site to see it live.</p>
+    <div class="live-grid" id="liveGrid"></div>
   </div>
 </section>
 
@@ -369,6 +430,7 @@ footer{position:relative;z-index:2;padding:60px 0 40px;border-top:1px solid rgba
 </script>
 
 <!-- MAIN SCRIPT -->
+<script src="config.js"></script>
 <script>
 /* ---------- CONFIG ---------- */
 const WA_NUMBER = "2348069662975";   /* 08069662975 in international format: drop the 0, add Nigeria's 234 */
@@ -609,14 +671,98 @@ document.querySelectorAll("[data-say]").forEach(sec=>{
 });
 setTimeout(()=>say(document.getElementById("home").dataset.say),1600);
 
-function robotScreenPos(){
+/* The scroll-guided path (the original behaviour). */
+function guidePos(){
   const p=robotTarget.p, W=innerWidth, H=innerHeight;
   const zig=Math.cos(p*Math.PI*5); // Start on the right side, then keep the same smooth side-to-side flow.
   const x=W/2 + zig*W*ZIG;
   const y=H*(0.45 + p*0.25) + (REDUCED?0:Math.sin(performance.now()/600)*10);
-  const dir=Math.cos(p*Math.PI*5);
-  return {x,y,dir,p};
+  return {x,y,dir:zig,p};
 }
+
+/* ---------- MANUAL CONTROL ----------
+   ctl.manual  : true while the user is steering the robot
+   ctl.blend   : 0 = follow scroll guide, 1 = fully manual (eased, so hand-over is smooth)
+   mx,my       : smoothed manual position;  tx,ty : where the user wants it to go */
+const ctl={manual:false,blend:0,mx:0,my:0,tx:0,ty:0,dir:1,anchor:0,jx:0,jy:0,joyActive:false};
+const JOY_SPEED=460;           // px per second at full stick
+const guideBtn=document.getElementById("joyGuide");
+
+function clampXY(){
+  ctl.tx=Math.max(60,Math.min(innerWidth-60,ctl.tx));
+  ctl.ty=Math.max(100,Math.min(innerHeight-60,ctl.ty));
+}
+function enterManual(){
+  if(ctl.manual) return;
+  const cur=robotScreenPos();          // start exactly where the robot is now (no jump)
+  ctl.mx=ctl.tx=cur.x; ctl.my=ctl.ty=cur.y; ctl.dir=cur.dir;
+  ctl.manual=true; ctl.blend=1; guideBtn.classList.add("on");
+}
+function releaseToGuide(){
+  ctl.manual=false; ctl.jx=ctl.jy=0; guideBtn.classList.remove("on");
+}
+guideBtn.addEventListener("click",releaseToGuide);
+
+/* One update per frame: moves the manual position and eases blend */
+gsap.ticker.add((time,deltaMs)=>{
+  const dt=Math.min(deltaMs/1000,.05);
+  if(ctl.manual){
+    if(ctl.joyActive){                  // joystick: velocity-based movement
+      ctl.tx+=ctl.jx*JOY_SPEED*dt; ctl.ty+=ctl.jy*JOY_SPEED*dt; clampXY();
+      ctl.anchor=scrollY;               // stay manual while the stick is in use
+    }
+    const k=1-Math.exp(-6*dt), ox=ctl.mx;
+    ctl.mx+=(ctl.tx-ctl.mx)*k; ctl.my+=(ctl.ty-ctl.my)*k;
+    if(Math.abs(ctl.tx-ox)>1.5) ctl.dir=ctl.tx>ox?-1:1;   // dir -1 = facing right (same sign rule as the guide path)
+    if(!ctl.joyActive && Math.abs(scrollY-ctl.anchor)>250) releaseToGuide(); // scrolling far = guide mode again
+  }
+  const target=ctl.manual?1:0;
+  ctl.blend+=(target-ctl.blend)*(1-Math.exp(-4*dt));
+  if(!ctl.manual && ctl.blend<.002) ctl.blend=0;
+});
+
+/* What the 3D model / video fallback read every frame */
+function robotScreenPos(){
+  const g=guidePos(), b=ctl.blend;
+  if(b===0) return g;
+  const bob=(REDUCED||!ctl.manual)?0:Math.sin(performance.now()/600)*8;
+  return {x:g.x+(ctl.mx-g.x)*b, y:g.y+(ctl.my+bob-g.y)*b, dir:b>.5?ctl.dir:g.dir, p:g.p};
+}
+
+/* PC: click any empty spot and the robot flies there */
+if(matchMedia("(hover:hover) and (pointer:fine)").matches){
+  const ping=document.getElementById("ping");
+  document.addEventListener("click",e=>{
+    if(e.target.closest("a,button,input,textarea,select,label,nav,.card,#joy,#leaveModal")) return;
+    if(String(getSelection())) return;      // user was selecting text, not steering
+    enterManual();
+    ctl.anchor=scrollY; ctl.tx=e.clientX; ctl.ty=e.clientY; clampXY();
+    ping.style.transform=`translate(${e.clientX}px,${e.clientY}px)`;
+    ping.classList.remove("go"); void ping.offsetWidth; ping.classList.add("go");
+    say("On my way!");
+  });
+}
+
+/* Touch: virtual joystick */
+(function(){
+  const joy=document.getElementById("joy"), knob=document.getElementById("joyKnob"), R=40;
+  function stick(e){
+    const r=joy.getBoundingClientRect();
+    let dx=e.clientX-(r.left+r.width/2), dy=e.clientY-(r.top+r.height/2);
+    const len=Math.hypot(dx,dy); if(len>R){dx=dx/len*R; dy=dy/len*R;}
+    knob.style.transform=`translate(${dx}px,${dy}px)`;
+    ctl.jx=dx/R; ctl.jy=dy/R;
+  }
+  joy.addEventListener("pointerdown",e=>{
+    e.preventDefault(); joy.setPointerCapture(e.pointerId);
+    enterManual(); ctl.joyActive=true; stick(e);
+  });
+  joy.addEventListener("pointermove",e=>{ if(ctl.joyActive) stick(e); });
+  const stop=()=>{ ctl.joyActive=false; ctl.jx=ctl.jy=0; knob.style.transform="translate(0,0)"; ctl.anchor=scrollY; };
+  joy.addEventListener("pointerup",stop);
+  joy.addEventListener("pointercancel",stop);
+})();
+
 function placeBubble(x,y,size){
   const left = x > innerWidth/2 ? x - size/2 - 260 : x + size/2 + 10;
   bubble.style.transform=`translate(${Math.max(8,Math.min(innerWidth-260,left))}px,${Math.max(80,y-size/2-20)}px)`;
@@ -639,6 +785,73 @@ window.robotScreenPos=robotScreenPos;
 window.placeBubble=placeBubble;
 /* If the 3D module never loads (offline / old browser), use the video */
 setTimeout(()=>{ if(!window.robot3DReady) startVideoFallback(); },8000);
+
+/* ---------- LIVE SITES (from the database) + "leaving the page" notice ----------
+   The public page only READS, so a plain fetch() to Supabase's REST address is enough:
+   no library is downloaded for visitors. (admin.html is the part that uses supabase-js.) */
+(function(){
+  const cfg=window.WT_CONFIG||{};
+  if(!cfg.SUPABASE_URL||!cfg.SUPABASE_ANON_KEY) return;           // not set up yet: section stays hidden
+
+  const modal=document.getElementById("leaveModal"), go=document.getElementById("leaveGo"), stay=document.getElementById("leaveStay");
+  let opener=null;
+
+  function openNotice(site,btn){
+    opener=btn;
+    const host=new URL(site.url).hostname.replace(/^www\./,"");
+    document.getElementById("leaveName").textContent=site.title;   // textContent: database text can never inject HTML
+    document.getElementById("leaveHost").textContent=host;
+    go.href=site.url;
+    modal.classList.add("on"); modal.setAttribute("aria-hidden","false");
+    if(lenis) lenis.stop(); document.body.style.overflow="hidden";
+    stay.focus();
+  }
+  function closeNotice(){
+    modal.classList.remove("on"); modal.setAttribute("aria-hidden","true");
+    if(lenis) lenis.start(); document.body.style.overflow="";
+    if(opener) opener.focus();
+  }
+  stay.addEventListener("click",closeNotice);
+  go.addEventListener("click",()=>setTimeout(closeNotice,150));    // the new tab opens, then the notice closes
+  modal.addEventListener("click",e=>{ if(e.target===modal) closeNotice(); });
+  addEventListener("keydown",e=>{
+    if(!modal.classList.contains("on")) return;
+    if(e.key==="Escape") closeNotice();
+    if(e.key==="Tab"){                                              // keep keyboard focus inside the notice
+      const f=[stay,go], i=f.indexOf(document.activeElement);
+      e.preventDefault(); f[(i+(e.shiftKey?-1:1)+f.length)%f.length].focus();
+    }
+  });
+
+  function card(site,i){
+    const b=document.createElement("button");
+    b.type="button"; b.className="live-card"; b.style.animationDelay=(i*70)+"ms";
+    const shot=document.createElement("div"); shot.className="live-shot";
+    if(site.image_url){ const im=document.createElement("img"); im.loading="lazy"; im.alt=site.title+" preview"; im.src=site.image_url; shot.appendChild(im); }
+    else shot.textContent=site.title.charAt(0).toUpperCase();
+    const body=document.createElement("div"); body.className="live-body";
+    const h=document.createElement("h4"); h.textContent=site.title;
+    const host=document.createElement("div"); host.className="live-host"; host.textContent=new URL(site.url).hostname.replace(/^www\./,"");
+    body.append(h,host);
+    if(site.description){ const p=document.createElement("p"); p.textContent=site.description; body.appendChild(p); }
+    const v=document.createElement("span"); v.className="live-visit"; v.textContent="Visit live site \u2197"; body.appendChild(v);
+    b.append(shot,body);
+    b.addEventListener("click",()=>openNotice(site,b));
+    return b;
+  }
+
+  fetch(cfg.SUPABASE_URL+"/rest/v1/live_sites?select=id,title,url,description,image_url&order=created_at.desc",{headers:{apikey:cfg.SUPABASE_ANON_KEY}})
+    .then(r=>r.ok?r.json():[])
+    .then(rows=>{
+      const safe=rows.filter(r=>{ try{ return /^https?:$/.test(new URL(r.url).protocol); }catch(e){ return false; } });  // only real web links
+      if(!safe.length) return;
+      const grid=document.getElementById("liveGrid");
+      safe.forEach((r,i)=>grid.appendChild(card(r,i)));
+      document.getElementById("liveWrap").hidden=false;
+      if(window.ScrollTrigger) ScrollTrigger.refresh();              // the page just got taller: re-measure scroll positions
+    })
+    .catch(()=>{});                                                   // offline or not set up: the rest of the site is unaffected
+})();
 </script>
 
 <!-- THREE.JS ROBOT: loads assets/robot.glb, falls back to the video if missing -->
