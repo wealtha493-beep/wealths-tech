@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex,nofollow" />
+<title>Admin | Wealth's Tech</title>
+<link rel="icon" type="image/png" href="assets/logo.png" />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+:root{--black:#05070D;--blue:#00AEEF;--blue2:#0057FF;--green:#25D366;--red:#ff5d6c;--glass:rgba(255,255,255,.05);--line:rgba(0,174,239,.25)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,system-ui,sans-serif;color:#E8EEF7;background:radial-gradient(1200px 600px at 50% -10%,rgba(0,87,255,.25),transparent),var(--black);min-height:100vh;line-height:1.5}
+h1,h2,h3{font-family:Sora,sans-serif;line-height:1.15}
+a{color:var(--blue);text-decoration:none}
+.wrap{width:min(960px,92%);margin:0 auto;padding:40px 0 80px}
+header.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:34px}
+.brand{display:flex;align-items:center;gap:12px;font-family:Sora,sans-serif;font-weight:700}
+.brand img{width:38px;height:38px;object-fit:contain}
+.panel{padding:28px;border-radius:22px;background:var(--glass);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);margin-bottom:26px}
+.panel h2{font-size:1.35rem;margin-bottom:6px}
+.muted{color:#9fb0c6;font-size:.92rem}
+label{display:block;font-size:.82rem;color:#c8d4e4;margin:16px 0 6px}
+input[type=text],input[type=url],input[type=email],input[type=password],textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:rgba(5,7,13,.6);color:#fff;font:inherit;outline:none}
+input:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,174,239,.2)}
+textarea{resize:vertical;min-height:70px}
+input[type=file]{width:100%;padding:10px;border-radius:12px;border:1px dashed var(--line);background:rgba(5,7,13,.4);color:#c8d4e4;font:inherit;font-size:.9rem}
+.row{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.btn{padding:12px 22px;border-radius:999px;border:1px solid transparent;font:inherit;font-weight:600;cursor:pointer;color:#fff;transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-1px)}
+.btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
+.btn-primary{background:linear-gradient(90deg,var(--blue),var(--blue2));box-shadow:0 8px 30px -10px rgba(0,174,239,.7)}
+.btn-ghost{background:transparent;border-color:var(--line)}
+.btn-danger{background:transparent;border-color:rgba(255,93,108,.5);color:var(--red)}
+.btn-sm{padding:7px 14px;font-size:.82rem}
+.msg{margin-top:16px;padding:12px 14px;border-radius:12px;font-size:.9rem;display:none}
+.msg.show{display:block}
+.msg.err{background:rgba(255,93,108,.12);border:1px solid rgba(255,93,108,.4);color:#ffb3bb}
+.msg.ok{background:rgba(37,211,102,.12);border:1px solid rgba(37,211,102,.4);color:#a8f0c4}
+.hidden{display:none!important}
+.list{display:grid;gap:14px;margin-top:18px}
+.item{display:grid;grid-template-columns:120px 1fr auto;gap:16px;align-items:center;padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}
+.thumb{width:120px;height:78px;border-radius:10px;object-fit:cover;background:linear-gradient(135deg,var(--blue2),#0b1b3d);display:grid;place-items:center;font-family:Sora,sans-serif;font-size:1.6rem;color:#fff;overflow:hidden}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.item h3{font-size:1rem;margin-bottom:3px}
+.item p{font-size:.85rem;color:#9fb0c6;word-break:break-word}
+.actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.preview-now{margin-top:10px;max-width:220px;border-radius:10px;border:1px solid var(--line)}
+@media (max-width:640px){.item{grid-template-columns:1fr}.actions{justify-content:flex-start}.thumb{width:100%;height:150px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><img src="assets/logo.png" alt="" /> Wealth's Tech Admin</div>
+    <div class="row" style="margin:0">
+      <a class="btn btn-ghost btn-sm" href="index.html">View site</a>
+      <button class="btn btn-ghost btn-sm hidden" id="logoutBtn" type="button">Log out</button>
+    </div>
+  </header>
+
+  <!-- shown if config.js has not been filled in yet -->
+  <section class="panel hidden" id="needConfig">
+    <h2>One-time setup needed</h2>
+    <p class="muted">Open <strong>config.js</strong> and paste your Supabase Project URL and anon key. Steps are written at the top of that file and in supabase-setup.sql.</p>
+  </section>
+
+  <!-- LOGIN -->
+  <section class="panel hidden" id="loginPanel">
+    <h2>Admin login</h2>
+    <p class="muted">Only the owner can add or remove the live sites shown on the website.</p>
+    <form id="loginForm" autocomplete="on">
+      <label for="email">Email</label>
+      <input id="email" type="email" required autocomplete="username" />
+      <label for="password">Password</label>
+      <input id="password" type="password" required autocomplete="current-password" />
+      <div class="row"><button class="btn btn-primary" id="loginBtn" type="submit">Log in</button></div>
+      <div class="msg err" id="loginMsg" role="alert"></div>
+    </form>
+  </section>
+
+  <!-- DASHBOARD -->
+  <div class="hidden" id="dash">
+    <section class="panel">
+      <h2 id="formTitle">Add a live site</h2>
+      <p class="muted">It will appear in the "Our Work" section. Before a visitor is taken there, they see a notice that they are leaving the page.</p>
+      <form id="siteForm">
+        <label for="title">Site name</label>
+        <input id="title" type="text" maxlength="80" required placeholder="e.g. Adamaps Food" />
+        <label for="url">Live link</label>
+        <input id="url" type="text" inputmode="url" required placeholder="https://example.com" />
+        <label for="desc">Short description <span class="muted">(optional, max 160 characters)</span></label>
+        <textarea id="desc" maxlength="160" placeholder="e.g. Online food store with payments and an admin dashboard"></textarea>
+        <label for="image">Preview image <span class="muted">(optional: a screenshot of the site, JPG/PNG/WebP, max 2 MB)</span></label>
+        <input id="image" type="file" accept="image/png,image/jpeg,image/webp" />
+        <img class="preview-now hidden" id="previewNow" alt="Current preview" />
+        <div class="row">
+          <button class="btn btn-primary" id="saveBtn" type="submit">Add site</button>
+          <button class="btn btn-ghost hidden" id="cancelEdit" type="button">Cancel edit</button>
+        </div>
+        <div class="msg" id="formMsg" role="status"></div>
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2>Your live sites <span class="muted" id="count"></span></h2>
+      <div class="list" id="list"></div>
+      <p class="muted hidden" id="empty" style="margin-top:14px">Nothing here yet. Add your first live site above.</p>
+    </section>
+  </div>
+</div>
+
+<!-- supabase-js: handles login (Auth), the database table and image upload (Storage) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const cfg = window.WT_CONFIG || {};
+const BUCKET = "site-previews";
+const MAX_IMG = 2 * 1024 * 1024;
+
+if (!cfg.SUPABASE_URL || !cfg.SUPABASE_ANON_KEY || !window.supabase) {
+  $("needConfig").classList.remove("hidden");
+} else {
+  const sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+  let editing = null;   // the row being edited, or null when adding a new one
+
+  function flash(el, text, kind) {
+    el.textContent = text;
+    el.className = "msg show " + kind;      // textContent, never innerHTML: no injected HTML
+  }
+
+  /* Accepts "example.com" or "https://example.com"; only http(s) links are allowed */
+  function cleanUrl(raw) {
+    let v = raw.trim();
+    if (!/^https?:\/\//i.test(v)) v = "https://" + v;
+    const u = new URL(v);                    // throws on nonsense
+    if (u.protocol !== "http:" && u.protocol !== "https:") throw new Error("bad protocol");
+    return u.href;
+  }
+
+  /* ---- show login or dashboard depending on the session ---- */
+  function showFor(session) {
+    $("loginPanel").classList.toggle("hidden", !!session);
+    $("dash").classList.toggle("hidden", !session);
+    $("logoutBtn").classList.toggle("hidden", !session);
+    if (session) loadList();
+  }
+  sb.auth.getSession().then(({ data }) => showFor(data.session));
+  sb.auth.onAuthStateChange((_e, session) => showFor(session));
+
+  $("loginForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    $("loginBtn").disabled = true;
+    const { error } = await sb.auth.signInWithPassword({ email: $("email").value.trim(), password: $("password").value });
+    $("loginBtn").disabled = false;
+    if (error) flash($("loginMsg"), "Login failed. Check your email and password.", "err");
+    else $("password").value = "";
+  });
+  $("logoutBtn").addEventListener("click", () => sb.auth.signOut());
+
+  /* ---- list ---- */
+  async function loadList() {
+    const { data, error } = await sb.from("live_sites").select("*").order("created_at", { ascending: false });
+    const list = $("list"); list.textContent = "";
+    if (error) { flash($("formMsg"), "Could not load the list: " + error.message, "err"); return; }
+    $("count").textContent = data.length ? "(" + data.length + ")" : "";
+    $("empty").classList.toggle("hidden", data.length > 0);
+    data.forEach(row => list.appendChild(renderItem(row)));
+  }
+
+  function renderItem(row) {
+    const item = document.createElement("div"); item.className = "item";
+    const thumb = document.createElement("div"); thumb.className = "thumb";
+    if (row.image_url) { const im = document.createElement("img"); im.src = row.image_url; im.alt = ""; thumb.appendChild(im); }
+    else thumb.textContent = row.title.charAt(0).toUpperCase();
+    const info = document.createElement("div");
+    const h = document.createElement("h3"); h.textContent = row.title;
+    const p = document.createElement("p"); p.textContent = row.url;
+    info.append(h, p);
+    if (row.description) { const d = document.createElement("p"); d.textContent = row.description; info.appendChild(d); }
+    const act = document.createElement("div"); act.className = "actions";
+    const visit = document.createElement("a"); visit.className = "btn btn-ghost btn-sm"; visit.textContent = "Open"; visit.href = row.url; visit.target = "_blank"; visit.rel = "noopener noreferrer";
+    const edit = document.createElement("button"); edit.className = "btn btn-ghost btn-sm"; edit.type = "button"; edit.textContent = "Edit";
+    edit.addEventListener("click", () => startEdit(row));
+    const del = document.createElement("button"); del.className = "btn btn-danger btn-sm"; del.type = "button"; del.textContent = "Delete";
+    del.addEventListener("click", () => removeRow(row));
+    act.append(visit, edit, del);
+    item.append(thumb, info, act);
+    return item;
+  }
+
+  /* ---- add / edit ---- */
+  function resetForm() {
+    editing = null; $("siteForm").reset();
+    $("formTitle").textContent = "Add a live site"; $("saveBtn").textContent = "Add site";
+    $("cancelEdit").classList.add("hidden"); $("previewNow").classList.add("hidden");
+  }
+  function startEdit(row) {
+    editing = row;
+    $("title").value = row.title; $("url").value = row.url; $("desc").value = row.description || ""; $("image").value = "";
+    $("formTitle").textContent = "Edit live site"; $("saveBtn").textContent = "Save changes";
+    $("cancelEdit").classList.remove("hidden");
+    if (row.image_url) { $("previewNow").src = row.image_url; $("previewNow").classList.remove("hidden"); } else $("previewNow").classList.add("hidden");
+    scrollTo({ top: 0, behavior: "smooth" });
+  }
+  $("cancelEdit").addEventListener("click", resetForm);
+
+  /* the file path inside the bucket, taken from a public image URL */
+  const pathFromUrl = url => { const i = url.indexOf("/" + BUCKET + "/"); return i < 0 ? null : decodeURIComponent(url.slice(i + BUCKET.length + 2).split("?")[0]); };
+
+  async function uploadImage(file) {
+    if (!/^image\/(png|jpeg|webp)$/.test(file.type)) throw new Error("The preview must be a JPG, PNG or WebP image.");
+    if (file.size > MAX_IMG) throw new Error("That image is bigger than 2 MB. Please use a smaller one.");
+    const ext = file.type === "image/png" ? "png" : file.type === "image/webp" ? "webp" : "jpg";
+    const path = crypto.randomUUID() + "." + ext;          // random name: no clashes, no odd characters
+    const { error } = await sb.storage.from(BUCKET).upload(path, file, { contentType: file.type, cacheControl: "31536000" });
+    if (error) throw new Error("Image upload failed: " + error.message);
+    return sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
+  }
+
+  $("siteForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    const msg = $("formMsg"); $("saveBtn").disabled = true;
+    try {
+      const record = { title: $("title").value.trim(), url: cleanUrl($("url").value), description: $("desc").value.trim() || null };
+      const file = $("image").files[0];
+      let oldImage = null;
+      if (file) { record.image_url = await uploadImage(file); if (editing && editing.image_url) oldImage = editing.image_url; }
+      const q = editing ? sb.from("live_sites").update(record).eq("id", editing.id) : sb.from("live_sites").insert(record);
+      const { error } = await q;
+      if (error) throw new Error(error.message);
+      if (oldImage) { const p = pathFromUrl(oldImage); if (p) sb.storage.from(BUCKET).remove([p]); }   // tidy up the replaced picture
+      flash(msg, editing ? "Changes saved. The website shows them straight away." : "Site added. It is now live on the website.", "ok");
+      resetForm(); loadList();
+    } catch (err) {
+      flash(msg, err.message === "bad protocol" || err instanceof TypeError ? "That link doesn't look right. Example: https://example.com" : err.message, "err");
+    }
+    $("saveBtn").disabled = false;
+  });
+
+  async function removeRow(row) {
+    if (!confirm('Delete "' + row.title + '" from the website?')) return;
+    const { error } = await sb.from("live_sites").delete().eq("id", row.id);
+    if (error) { flash($("formMsg"), "Delete failed: " + error.message, "err"); return; }
+    if (row.image_url) { const p = pathFromUrl(row.image_url); if (p) sb.storage.from(BUCKET).remove([p]); }
+    if (editing && editing.id === row.id) resetForm();
+    loadList();
+  }
+}
+</script>
+</body>
+</html>
