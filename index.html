@@ -184,6 +184,19 @@ footer{position:relative;z-index:2;padding:60px 0 40px;border-top:1px solid rgba
 
 .reveal{opacity:0;transform:translateY(40px)}
 
+/* 11b. ROBOT MANUAL CONTROL (joystick on touch, click-to-move on mouse) */
+#joy{position:fixed;left:18px;bottom:22px;z-index:60;width:110px;height:110px;border-radius:50%;display:none;touch-action:none;user-select:none;-webkit-user-select:none;
+  background:rgba(10,20,40,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);box-shadow:0 0 24px rgba(0,174,239,.3)}
+#joy .knob{position:absolute;left:50%;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#4cc9ff,#0057ff);box-shadow:0 0 18px var(--blue);will-change:transform}
+#joyGuide{position:fixed;left:18px;bottom:142px;z-index:60;display:none;padding:8px 14px;border-radius:999px;font:inherit;font-size:.8rem;color:#fff;cursor:pointer;
+  background:rgba(10,20,40,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line)}
+#joyGuide.on{display:block}
+#ping{position:fixed;top:0;left:0;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;border:2px solid var(--blue);z-index:5;pointer-events:none;opacity:0}
+#ping.go{animation:ping .7s ease-out}
+@keyframes ping{0%{opacity:.9;transform:scale(.4)}100%{opacity:0;transform:scale(3)}}
+@media (hover:none) and (pointer:coarse){#joy{display:block}}
+
 /* 12. RESPONSIVE */
 @media (max-width:900px){
   nav ul{position:absolute;top:70px;left:0;right:0;flex-direction:column;gap:0;background:rgba(5,7,13,.95);border-radius:16px;border:1px solid var(--line);display:none;padding:10px}
@@ -243,6 +256,9 @@ footer{position:relative;z-index:2;padding:60px 0 40px;border-top:1px solid rgba
   <video src="assets/robot-spin.mp4" muted loop playsinline preload="none"></video>
 </div>
 <div id="bubble" role="status" aria-live="polite"><span id="bubbleText"></span><span class="caret"></span></div>
+<div id="ping" aria-hidden="true"></div>
+<div id="joy" aria-label="Move the guide robot"><div class="knob" id="joyKnob"></div></div>
+<button id="joyGuide" type="button">&#8634; Guide me</button>
 
 <main>
 <!-- HERO -->
@@ -609,14 +625,98 @@ document.querySelectorAll("[data-say]").forEach(sec=>{
 });
 setTimeout(()=>say(document.getElementById("home").dataset.say),1600);
 
-function robotScreenPos(){
+/* The scroll-guided path (the original behaviour). */
+function guidePos(){
   const p=robotTarget.p, W=innerWidth, H=innerHeight;
   const zig=Math.cos(p*Math.PI*5); // Start on the right side, then keep the same smooth side-to-side flow.
   const x=W/2 + zig*W*ZIG;
   const y=H*(0.45 + p*0.25) + (REDUCED?0:Math.sin(performance.now()/600)*10);
-  const dir=Math.cos(p*Math.PI*5);
-  return {x,y,dir,p};
+  return {x,y,dir:zig,p};
 }
+
+/* ---------- MANUAL CONTROL ----------
+   ctl.manual  : true while the user is steering the robot
+   ctl.blend   : 0 = follow scroll guide, 1 = fully manual (eased, so hand-over is smooth)
+   mx,my       : smoothed manual position;  tx,ty : where the user wants it to go */
+const ctl={manual:false,blend:0,mx:0,my:0,tx:0,ty:0,dir:1,anchor:0,jx:0,jy:0,joyActive:false};
+const JOY_SPEED=460;           // px per second at full stick
+const guideBtn=document.getElementById("joyGuide");
+
+function clampXY(){
+  ctl.tx=Math.max(60,Math.min(innerWidth-60,ctl.tx));
+  ctl.ty=Math.max(100,Math.min(innerHeight-60,ctl.ty));
+}
+function enterManual(){
+  if(ctl.manual) return;
+  const cur=robotScreenPos();          // start exactly where the robot is now (no jump)
+  ctl.mx=ctl.tx=cur.x; ctl.my=ctl.ty=cur.y; ctl.dir=cur.dir;
+  ctl.manual=true; ctl.blend=1; guideBtn.classList.add("on");
+}
+function releaseToGuide(){
+  ctl.manual=false; ctl.jx=ctl.jy=0; guideBtn.classList.remove("on");
+}
+guideBtn.addEventListener("click",releaseToGuide);
+
+/* One update per frame: moves the manual position and eases blend */
+gsap.ticker.add((time,deltaMs)=>{
+  const dt=Math.min(deltaMs/1000,.05);
+  if(ctl.manual){
+    if(ctl.joyActive){                  // joystick: velocity-based movement
+      ctl.tx+=ctl.jx*JOY_SPEED*dt; ctl.ty+=ctl.jy*JOY_SPEED*dt; clampXY();
+      ctl.anchor=scrollY;               // stay manual while the stick is in use
+    }
+    const k=1-Math.exp(-6*dt), ox=ctl.mx;
+    ctl.mx+=(ctl.tx-ctl.mx)*k; ctl.my+=(ctl.ty-ctl.my)*k;
+    if(Math.abs(ctl.tx-ox)>1.5) ctl.dir=ctl.tx>ox?-1:1;   // dir -1 = facing right (same sign rule as the guide path)
+    if(!ctl.joyActive && Math.abs(scrollY-ctl.anchor)>250) releaseToGuide(); // scrolling far = guide mode again
+  }
+  const target=ctl.manual?1:0;
+  ctl.blend+=(target-ctl.blend)*(1-Math.exp(-4*dt));
+  if(!ctl.manual && ctl.blend<.002) ctl.blend=0;
+});
+
+/* What the 3D model / video fallback read every frame */
+function robotScreenPos(){
+  const g=guidePos(), b=ctl.blend;
+  if(b===0) return g;
+  const bob=(REDUCED||!ctl.manual)?0:Math.sin(performance.now()/600)*8;
+  return {x:g.x+(ctl.mx-g.x)*b, y:g.y+(ctl.my+bob-g.y)*b, dir:b>.5?ctl.dir:g.dir, p:g.p};
+}
+
+/* PC: click any empty spot and the robot flies there */
+if(matchMedia("(hover:hover) and (pointer:fine)").matches){
+  const ping=document.getElementById("ping");
+  document.addEventListener("click",e=>{
+    if(e.target.closest("a,button,input,textarea,select,label,nav,.card,#joy")) return;
+    if(String(getSelection())) return;      // user was selecting text, not steering
+    enterManual();
+    ctl.anchor=scrollY; ctl.tx=e.clientX; ctl.ty=e.clientY; clampXY();
+    ping.style.transform=`translate(${e.clientX}px,${e.clientY}px)`;
+    ping.classList.remove("go"); void ping.offsetWidth; ping.classList.add("go");
+    say("On my way!");
+  });
+}
+
+/* Touch: virtual joystick */
+(function(){
+  const joy=document.getElementById("joy"), knob=document.getElementById("joyKnob"), R=40;
+  function stick(e){
+    const r=joy.getBoundingClientRect();
+    let dx=e.clientX-(r.left+r.width/2), dy=e.clientY-(r.top+r.height/2);
+    const len=Math.hypot(dx,dy); if(len>R){dx=dx/len*R; dy=dy/len*R;}
+    knob.style.transform=`translate(${dx}px,${dy}px)`;
+    ctl.jx=dx/R; ctl.jy=dy/R;
+  }
+  joy.addEventListener("pointerdown",e=>{
+    e.preventDefault(); joy.setPointerCapture(e.pointerId);
+    enterManual(); ctl.joyActive=true; stick(e);
+  });
+  joy.addEventListener("pointermove",e=>{ if(ctl.joyActive) stick(e); });
+  const stop=()=>{ ctl.joyActive=false; ctl.jx=ctl.jy=0; knob.style.transform="translate(0,0)"; ctl.anchor=scrollY; };
+  joy.addEventListener("pointerup",stop);
+  joy.addEventListener("pointercancel",stop);
+})();
+
 function placeBubble(x,y,size){
   const left = x > innerWidth/2 ? x - size/2 - 260 : x + size/2 + 10;
   bubble.style.transform=`translate(${Math.max(8,Math.min(innerWidth-260,left))}px,${Math.max(80,y-size/2-20)}px)`;
