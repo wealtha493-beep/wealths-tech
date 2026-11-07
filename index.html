@@ -109,32 +109,6 @@ nav ul a:hover{color:#fff}
 /* max-width:none stops this site's global "img{max-width:100%}" from squeezing the 420px cards on phones */
 .marquee-img{width:420px;height:270px;border-radius:16px;object-fit:cover;flex-shrink:0;max-width:none}
 
-/* 6c. LIVE SITES (added from admin.html) + "you are leaving" notice */
-.live-wrap{margin-top:70px}
-.live-title{font-size:clamp(1.4rem,3vw,2rem);margin-bottom:8px}
-.live-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;margin-top:28px}
-.live-card{display:block;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;padding:0;border-radius:20px;overflow:hidden;background:var(--glass);border:1px solid rgba(255,255,255,.08);
-  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:transform .3s,border-color .3s,box-shadow .3s;animation:liveIn .6s both}
-.live-card:hover,.live-card:focus-visible{transform:translateY(-6px);border-color:var(--blue);box-shadow:0 18px 50px -20px rgba(0,174,239,.6);outline:none}
-.live-shot{aspect-ratio:420/270;display:grid;place-items:center;background:linear-gradient(135deg,var(--blue2),#0b1b3d);font-family:Sora,sans-serif;font-size:3rem;color:#fff;overflow:hidden}
-.live-shot img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
-.live-card:hover .live-shot img{transform:scale(1.06)}
-.live-body{padding:18px 20px 20px}
-.live-body h4{font-size:1.1rem;margin-bottom:4px}
-.live-host{font-size:.8rem;color:var(--blue);margin-bottom:8px;word-break:break-all}
-.live-body p{color:#9fb0c6;font-size:.9rem}
-.live-visit{display:inline-block;margin-top:12px;font-size:.85rem;font-weight:600;color:#fff}
-@keyframes liveIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
-.leave{position:fixed;inset:0;z-index:95;display:none;place-items:center;padding:20px;background:rgba(5,7,13,.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.leave.on{display:grid}
-.leave-box{width:min(460px,100%);padding:34px 30px;border-radius:24px;text-align:center;background:rgba(10,20,40,.85);border:1px solid var(--line);box-shadow:0 0 60px -20px rgba(0,174,239,.7);animation:liveIn .35s both}
-.leave-icon{width:56px;height:56px;margin:0 auto 18px;border-radius:50%;display:grid;place-items:center;font-size:1.6rem;background:linear-gradient(135deg,var(--blue),var(--blue2));box-shadow:0 0 30px rgba(0,174,239,.6)}
-.leave-box h3{font-size:1.4rem;margin-bottom:12px}
-.leave-box p{color:#b9c7da;font-size:.95rem}
-.leave-box strong{color:#fff}
-.leave-note{margin-top:10px;font-size:.85rem;color:#8798b0}
-.leave-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:24px}
-
 /* 6b. WEBSITE PACKAGES: Basic / Pro / Premium, every sample links to WhatsApp */
 .tier{margin-top:48px;padding:34px;border-radius:26px;background:var(--glass);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(14px)}
 .tier-premium{border-color:var(--line);box-shadow:0 0 60px -25px rgba(0,174,239,.6)}
@@ -223,6 +197,20 @@ footer{position:relative;z-index:2;padding:60px 0 40px;border-top:1px solid rgba
 @keyframes ping{0%{opacity:.9;transform:scale(.4)}100%{opacity:0;transform:scale(3)}}
 @media (hover:none) and (pointer:coarse){#joy{display:block}}
 
+/* LIVE PROJECT PORTFOLIO */
+.portfolio-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,310px),1fr));gap:22px;margin-top:54px}
+.portfolio-card{overflow:hidden;border-radius:22px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.1);transition:transform .3s,border-color .3s,box-shadow .3s}
+.portfolio-card:hover{transform:translateY(-7px);border-color:var(--line);box-shadow:0 20px 55px -25px rgba(0,174,239,.55)}
+.portfolio-thumb{width:100%;height:220px;object-fit:cover;background:linear-gradient(135deg,#07152b,#102d54)}
+.portfolio-thumb-placeholder{height:220px;display:grid;place-items:center;font:700 2rem Sora;color:rgba(255,255,255,.6);background:radial-gradient(circle at 20% 20%,#075b88,#07101e 70%)}
+.portfolio-body{padding:24px}.portfolio-body h3{font-size:1.2rem;margin-bottom:9px}.portfolio-body p{color:#9fb0c6;font-size:.93rem;min-height:48px}
+.portfolio-link{margin-top:20px;display:inline-flex;align-items:center;gap:9px;color:#fff;font-weight:700}.portfolio-link span{color:var(--blue);font-size:1.2rem}
+.portfolio-empty{grid-column:1/-1;text-align:center;padding:55px 20px;border:1px dashed rgba(255,255,255,.16);border-radius:20px;color:#9fb0c6}
+.portfolio-loader{display:inline-block;width:24px;height:24px;border:2px solid rgba(0,174,239,.2);border-top-color:var(--blue);border-radius:50%;animation:portspin .8s linear infinite;margin-bottom:12px}@keyframes portspin{to{transform:rotate(360deg)}}
+.external-notice{width:min(480px,calc(100% - 32px));padding:32px;border:1px solid rgba(0,174,239,.35);border-radius:24px;background:#080e1b;color:#e8eef7;box-shadow:0 25px 90px #000b}
+.external-notice::backdrop{background:rgba(0,0,0,.78);backdrop-filter:blur(8px)}.notice-icon{width:48px;height:48px;display:grid;place-items:center;border-radius:14px;background:rgba(0,174,239,.13);color:var(--blue);font-size:1.6rem;margin-bottom:22px}
+.external-notice h3{font-size:1.55rem;margin:5px 0 12px}.notice-copy{color:#aab9cc;font-size:.94rem}.notice-url{overflow-wrap:anywhere;margin:20px 0;padding:13px 15px;border-radius:12px;background:rgba(255,255,255,.06);color:#8bdcff;font-size:.88rem}.notice-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}.notice-actions button{font:inherit}
+@media(max-width:560px){.portfolio-thumb,.portfolio-thumb-placeholder{height:190px}.external-notice{padding:24px}}
 /* 12. RESPONSIVE */
 @media (max-width:900px){
   nav ul{position:absolute;top:70px;left:0;right:0;flex-direction:column;gap:0;background:rgba(5,7,13,.95);border-radius:16px;border:1px solid var(--line);display:none;padding:10px}
@@ -286,18 +274,6 @@ footer{position:relative;z-index:2;padding:60px 0 40px;border-top:1px solid rgba
 <div id="joy" aria-label="Move the guide robot"><div class="knob" id="joyKnob"></div></div>
 <button id="joyGuide" type="button">&#8634; Guide me</button>
 
-<div id="leaveModal" class="leave" role="dialog" aria-modal="true" aria-labelledby="leaveTitle" aria-hidden="true">
-  <div class="leave-box">
-    <div class="leave-icon" aria-hidden="true">&#8599;</div>
-    <h3 id="leaveTitle">You are leaving this page</h3>
-    <p>You are about to be taken to a completely different website: <strong id="leaveName"></strong> (<span id="leaveHost"></span>).</p>
-    <p class="leave-note">It opens in a new tab and is a separate site, not part of Wealth's Tech. Your tab with us stays open, so you can come back anytime.</p>
-    <div class="leave-actions">
-      <button type="button" id="leaveStay" class="btn btn-ghost">Stay here</button>
-      <a id="leaveGo" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Continue to site</a>
-    </div>
-  </div>
-</div>
 <main>
 <!-- HERO -->
 <section id="home" data-say="Welcome to Wealth's Tech! I'm your guide. Let me show you around.">
@@ -332,19 +308,22 @@ footer{position:relative;z-index:2;padding:60px 0 40px;border-top:1px solid rgba
     <h2 class="section-title reveal">Sites that <span class="grad-text">work hard</span></h2>
     <p class="section-sub reveal">A look at the kind of websites we design and build.</p>
   </div>
-  <div id="marquee" class="marquee">
-    <div class="marquee-rows">
-      <div id="row1" class="marquee-row"></div>
-      <div id="row2" class="marquee-row"></div>
+  <div class="container">
+    <div id="portfolio-grid" class="portfolio-grid" aria-live="polite">
+      <div class="portfolio-empty"><span class="portfolio-loader"></span><p>Loading our projects...</p></div>
     </div>
   </div>
-  <!-- Filled from the database by admin.html; stays hidden until there is at least one site -->
-  <div class="container live-wrap" id="liveWrap" hidden>
-    <p class="eyebrow">Live websites</p>
-    <h3 class="live-title">Visit sites we have <span class="grad-text">built</span></h3>
-    <p class="section-sub">Tap any site to see it live.</p>
-    <div class="live-grid" id="liveGrid"></div>
-  </div>
+  <dialog id="external-notice" class="external-notice">
+    <div class="notice-icon">↗</div>
+    <p class="eyebrow">External website</p>
+    <h3>You're leaving our website</h3>
+    <p class="notice-copy">You're about to visit a separate website. It is independently operated and has its own content and privacy practices.</p>
+    <div class="notice-url" id="notice-url">https://example.com</div>
+    <div class="notice-actions">
+      <button type="button" class="btn btn-ghost" id="notice-cancel">Go back</button>
+      <button type="button" class="btn btn-primary" id="notice-continue">Continue <span aria-hidden="true">↗</span></button>
+    </div>
+  </dialog>
 </section>
 
 <!-- WEBSITE PACKAGES -->
@@ -422,6 +401,9 @@ footer{position:relative;z-index:2;padding:60px 0 40px;border-top:1px solid rgba
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="portfolio.js" defer></script>
 <script type="importmap">
 { "imports": {
   "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
@@ -430,7 +412,6 @@ footer{position:relative;z-index:2;padding:60px 0 40px;border-top:1px solid rgba
 </script>
 
 <!-- MAIN SCRIPT -->
-<script src="config.js"></script>
 <script>
 /* ---------- CONFIG ---------- */
 const WA_NUMBER = "2348069662975";   /* 08069662975 in international format: drop the 0, add Nigeria's 234 */
@@ -448,57 +429,11 @@ const SERVICES = [
   ["Google Business Profile & Maps","Show up on Google Maps with reviews, hours and directions.",'<path d="M12 21s-7-6.5-7-12a7 7 0 0114 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/>'],
 ];
 
-/* OUR WORK: website previews (same list and order as Jack's portfolio) */
-const MARQUEE_IMGS = [
-  "https://motionsites.ai/assets/hero-space-voyage-preview-eECLH3Yc.gif",
-  "https://motionsites.ai/assets/hero-codenest-preview-Cgppc2qV.gif",
-  "https://motionsites.ai/assets/hero-vex-ventures-preview-BczMFIiw.gif",
-  "https://motionsites.ai/assets/hero-stellar-ai-v2-preview-DjvxjG3C.gif",
-  "https://motionsites.ai/assets/hero-asme-preview-B_nGDnTP.gif",
-  "https://motionsites.ai/assets/hero-transform-data-preview-Cx5OU29N.gif",
-  "https://motionsites.ai/assets/hero-vitara-preview-Cjz2QYyU.gif",
-  "https://motionsites.ai/assets/hero-terra-preview-BFjrCr7T.gif",
-  "https://motionsites.ai/assets/hero-skyelite-preview-DHaZIgUv.gif",
-  "https://motionsites.ai/assets/hero-aethera-preview-DknSlcTa.gif",
-  "https://motionsites.ai/assets/hero-designpro-preview-D8c5_een.gif",
-  "https://motionsites.ai/assets/hero-stellar-ai-preview-D3HL6bw1.gif",
-  "https://motionsites.ai/assets/hero-xportfolio-preview-D4A8maiC.gif",
-  "https://motionsites.ai/assets/hero-orbit-web3-preview-BXt4OttD.gif",
-  "https://motionsites.ai/assets/hero-nexora-preview-cx5HmUgo.gif",
-  "https://motionsites.ai/assets/hero-evr-ventures-preview-DZxeVFEX.gif",
-  "https://motionsites.ai/assets/hero-planet-orbit-preview-DWAP8Z1P.gif",
-  "https://motionsites.ai/assets/hero-new-era-preview-CocuDUm9.gif",
-  "https://motionsites.ai/assets/hero-wealth-preview-B70idl_u.gif",
-  "https://motionsites.ai/assets/hero-luminex-preview-CxOP7ce6.gif",
-  "https://motionsites.ai/assets/hero-celestia-preview-0yO3jXO8.gif"
-];
-
 /* ---------- RENDER ---------- */
 document.getElementById("servicesGrid").innerHTML = SERVICES.map(([t,d,i])=>`
   <article class="card reveal tilt"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${i}</svg></div>
   <h3>${t}</h3><p>${d}</p></article>`).join("");
 
-/* Each row is tripled so the strip is always long enough to cover the screen while it slides */
-function fillRow(el, imgs) {
-  const tripled = [...imgs, ...imgs, ...imgs];
-  el.innerHTML = tripled.map(src => `<img class="marquee-img" loading="lazy" src="${src}" alt="Website preview" />`).join("");
-}
-const marqueeEl = document.getElementById("marquee");
-const row1 = document.getElementById("row1");
-const row2 = document.getElementById("row2");
-fillRow(row1, MARQUEE_IMGS.slice(0, 11));
-fillRow(row2, MARQUEE_IMGS.slice(11));
-
-/* Scroll-driven slide: row 1 drifts right, row 2 drifts left (same maths as Jack's page) */
-function onMarqueeScroll() {
-  const rect = marqueeEl.getBoundingClientRect();
-  const sectionTop = rect.top + window.scrollY;
-  const offset = (window.scrollY - sectionTop + window.innerHeight) * 0.3;
-  row1.style.transform = `translateX(${offset - 200}px)`;
-  row2.style.transform = `translateX(${-(offset - 200)}px)`;
-}
-window.addEventListener("scroll", onMarqueeScroll, { passive: true });
-window.addEventListener("resize", onMarqueeScroll);
 onMarqueeScroll();
 
 /* WEBSITE PACKAGES: edit the text here; "samples" are motionsites.ai preview images, 3 per package */
@@ -733,15 +668,7 @@ function robotScreenPos(){
 if(matchMedia("(hover:hover) and (pointer:fine)").matches){
   const ping=document.getElementById("ping");
   document.addEventListener("click",e=>{
-<<<<<<< HEAD
-    if(e.target.closest("a,button,input,textarea,select,label,nav,.card,#joy,#leaveModal")) return;
-=======
-<<<<<<< HEAD
-    if(e.target.closest("a,button,input,textarea,select,label,nav,.card,#joy,#leaveModal")) return;
-=======
     if(e.target.closest("a,button,input,textarea,select,label,nav,.card,#joy")) return;
->>>>>>> a1a13de9c8376846713bc039bfe9231c0bbed6ee
->>>>>>> 4e859837245db65db5c7afa1ac1af7fa0b6f87ed
     if(String(getSelection())) return;      // user was selecting text, not steering
     enterManual();
     ctl.anchor=scrollY; ctl.tx=e.clientX; ctl.ty=e.clientY; clampXY();
@@ -793,73 +720,6 @@ window.robotScreenPos=robotScreenPos;
 window.placeBubble=placeBubble;
 /* If the 3D module never loads (offline / old browser), use the video */
 setTimeout(()=>{ if(!window.robot3DReady) startVideoFallback(); },8000);
-
-/* ---------- LIVE SITES (from the database) + "leaving the page" notice ----------
-   The public page only READS, so a plain fetch() to Supabase's REST address is enough:
-   no library is downloaded for visitors. (admin.html is the part that uses supabase-js.) */
-(function(){
-  const cfg=window.WT_CONFIG||{};
-  if(!cfg.SUPABASE_URL||!cfg.SUPABASE_ANON_KEY) return;           // not set up yet: section stays hidden
-
-  const modal=document.getElementById("leaveModal"), go=document.getElementById("leaveGo"), stay=document.getElementById("leaveStay");
-  let opener=null;
-
-  function openNotice(site,btn){
-    opener=btn;
-    const host=new URL(site.url).hostname.replace(/^www\./,"");
-    document.getElementById("leaveName").textContent=site.title;   // textContent: database text can never inject HTML
-    document.getElementById("leaveHost").textContent=host;
-    go.href=site.url;
-    modal.classList.add("on"); modal.setAttribute("aria-hidden","false");
-    if(lenis) lenis.stop(); document.body.style.overflow="hidden";
-    stay.focus();
-  }
-  function closeNotice(){
-    modal.classList.remove("on"); modal.setAttribute("aria-hidden","true");
-    if(lenis) lenis.start(); document.body.style.overflow="";
-    if(opener) opener.focus();
-  }
-  stay.addEventListener("click",closeNotice);
-  go.addEventListener("click",()=>setTimeout(closeNotice,150));    // the new tab opens, then the notice closes
-  modal.addEventListener("click",e=>{ if(e.target===modal) closeNotice(); });
-  addEventListener("keydown",e=>{
-    if(!modal.classList.contains("on")) return;
-    if(e.key==="Escape") closeNotice();
-    if(e.key==="Tab"){                                              // keep keyboard focus inside the notice
-      const f=[stay,go], i=f.indexOf(document.activeElement);
-      e.preventDefault(); f[(i+(e.shiftKey?-1:1)+f.length)%f.length].focus();
-    }
-  });
-
-  function card(site,i){
-    const b=document.createElement("button");
-    b.type="button"; b.className="live-card"; b.style.animationDelay=(i*70)+"ms";
-    const shot=document.createElement("div"); shot.className="live-shot";
-    if(site.image_url){ const im=document.createElement("img"); im.loading="lazy"; im.alt=site.title+" preview"; im.src=site.image_url; shot.appendChild(im); }
-    else shot.textContent=site.title.charAt(0).toUpperCase();
-    const body=document.createElement("div"); body.className="live-body";
-    const h=document.createElement("h4"); h.textContent=site.title;
-    const host=document.createElement("div"); host.className="live-host"; host.textContent=new URL(site.url).hostname.replace(/^www\./,"");
-    body.append(h,host);
-    if(site.description){ const p=document.createElement("p"); p.textContent=site.description; body.appendChild(p); }
-    const v=document.createElement("span"); v.className="live-visit"; v.textContent="Visit live site \u2197"; body.appendChild(v);
-    b.append(shot,body);
-    b.addEventListener("click",()=>openNotice(site,b));
-    return b;
-  }
-
-  fetch(cfg.SUPABASE_URL+"/rest/v1/live_sites?select=id,title,url,description,image_url&order=created_at.desc",{headers:{apikey:cfg.SUPABASE_ANON_KEY}})
-    .then(r=>r.ok?r.json():[])
-    .then(rows=>{
-      const safe=rows.filter(r=>{ try{ return /^https?:$/.test(new URL(r.url).protocol); }catch(e){ return false; } });  // only real web links
-      if(!safe.length) return;
-      const grid=document.getElementById("liveGrid");
-      safe.forEach((r,i)=>grid.appendChild(card(r,i)));
-      document.getElementById("liveWrap").hidden=false;
-      if(window.ScrollTrigger) ScrollTrigger.refresh();              // the page just got taller: re-measure scroll positions
-    })
-    .catch(()=>{});                                                   // offline or not set up: the rest of the site is unaffected
-})();
 </script>
 
 <!-- THREE.JS ROBOT: loads assets/robot.glb, falls back to the video if missing -->
