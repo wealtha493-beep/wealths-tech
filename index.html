@@ -415,6 +415,24 @@ footer{position:relative;z-index:2;padding:60px 0 40px;border-top:1px solid rgba
 }}
 </script>
 
+<!-- Keep the page functional if an animation CDN fails to load. -->
+<script>
+if (!window.gsap || !window.ScrollTrigger) {
+  document.documentElement.classList.add("no-gsap");
+  window.ScrollTrigger = window.ScrollTrigger || {
+    update() {},
+    batch() {},
+    create() { return {}; }
+  };
+  window.gsap = window.gsap || {
+    registerPlugin() {},
+    ticker: { add() {}, lagSmoothing() {} },
+    to() {},
+    from() {}
+  };
+}
+</script>
+
 <!-- MAIN SCRIPT -->
 <script>
 /* ---------- CONFIG ---------- */
@@ -438,7 +456,7 @@ document.getElementById("servicesGrid").innerHTML = SERVICES.map(([t,d,i])=>`
   <article class="card reveal tilt"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${i}</svg></div>
   <h3>${t}</h3><p>${d}</p></article>`).join("");
 
-onMarqueeScroll();
+/* The old marquee initializer was removed; no marquee script exists on this page. */
 
 /* WEBSITE PACKAGES: edit the text here; "samples" are motionsites.ai preview images, 3 per package */
 const MS = "https://motionsites.ai/assets/";
