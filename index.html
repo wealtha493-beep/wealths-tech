@@ -183,9 +183,6 @@ footer{position:relative;z-index:2;padding:60px 0 40px;border-top:1px solid rgba
 #cursor.big{width:54px;height:54px;margin:-27px 0 0 -27px}
 
 .reveal{opacity:0;transform:translateY(40px)}
-/* Keep all page content readable if an animation CDN is unavailable. */
-.no-gsap .reveal{opacity:1!important;transform:none!important}
-.no-gsap #preloader{display:none!important}
 
 /* 11b. ROBOT MANUAL CONTROL (joystick on touch, click-to-move on mouse) */
 #joy{position:fixed;left:18px;bottom:22px;z-index:60;width:110px;height:110px;border-radius:50%;display:none;touch-action:none;user-select:none;-webkit-user-select:none;
@@ -200,20 +197,6 @@ footer{position:relative;z-index:2;padding:60px 0 40px;border-top:1px solid rgba
 @keyframes ping{0%{opacity:.9;transform:scale(.4)}100%{opacity:0;transform:scale(3)}}
 @media (hover:none) and (pointer:coarse){#joy{display:block}}
 
-/* LIVE PROJECT PORTFOLIO */
-.portfolio-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,310px),1fr));gap:22px;margin-top:54px}
-.portfolio-card{overflow:hidden;border-radius:22px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.1);transition:transform .3s,border-color .3s,box-shadow .3s}
-.portfolio-card:hover{transform:translateY(-7px);border-color:var(--line);box-shadow:0 20px 55px -25px rgba(0,174,239,.55)}
-.portfolio-thumb{width:100%;height:220px;object-fit:cover;background:linear-gradient(135deg,#07152b,#102d54)}
-.portfolio-thumb-placeholder{height:220px;display:grid;place-items:center;font:700 2rem Sora;color:rgba(255,255,255,.6);background:radial-gradient(circle at 20% 20%,#075b88,#07101e 70%)}
-.portfolio-body{padding:24px}.portfolio-body h3{font-size:1.2rem;margin-bottom:9px}.portfolio-body p{color:#9fb0c6;font-size:.93rem;min-height:48px}
-.portfolio-link{margin-top:20px;display:inline-flex;align-items:center;gap:9px;color:#fff;font-weight:700}.portfolio-link span{color:var(--blue);font-size:1.2rem}
-.portfolio-empty{grid-column:1/-1;text-align:center;padding:55px 20px;border:1px dashed rgba(255,255,255,.16);border-radius:20px;color:#9fb0c6}
-.portfolio-loader{display:inline-block;width:24px;height:24px;border:2px solid rgba(0,174,239,.2);border-top-color:var(--blue);border-radius:50%;animation:portspin .8s linear infinite;margin-bottom:12px}@keyframes portspin{to{transform:rotate(360deg)}}
-.external-notice{width:min(480px,calc(100% - 32px));padding:32px;border:1px solid rgba(0,174,239,.35);border-radius:24px;background:#080e1b;color:#e8eef7;box-shadow:0 25px 90px #000b}
-.external-notice::backdrop{background:rgba(0,0,0,.78);backdrop-filter:blur(8px)}.notice-icon{width:48px;height:48px;display:grid;place-items:center;border-radius:14px;background:rgba(0,174,239,.13);color:var(--blue);font-size:1.6rem;margin-bottom:22px}
-.external-notice h3{font-size:1.55rem;margin:5px 0 12px}.notice-copy{color:#aab9cc;font-size:.94rem}.notice-url{overflow-wrap:anywhere;margin:20px 0;padding:13px 15px;border-radius:12px;background:rgba(255,255,255,.06);color:#8bdcff;font-size:.88rem}.notice-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}.notice-actions button{font:inherit}
-@media(max-width:560px){.portfolio-thumb,.portfolio-thumb-placeholder{height:190px}.external-notice{padding:24px}}
 /* 12. RESPONSIVE */
 @media (max-width:900px){
   nav ul{position:absolute;top:70px;left:0;right:0;flex-direction:column;gap:0;background:rgba(5,7,13,.95);border-radius:16px;border:1px solid var(--line);display:none;padding:10px}
@@ -311,22 +294,12 @@ footer{position:relative;z-index:2;padding:60px 0 40px;border-top:1px solid rgba
     <h2 class="section-title reveal">Sites that <span class="grad-text">work hard</span></h2>
     <p class="section-sub reveal">A look at the kind of websites we design and build.</p>
   </div>
-  <div class="container">
-    <div id="portfolio-grid" class="portfolio-grid" aria-live="polite">
-      <div class="portfolio-empty"><span class="portfolio-loader"></span><p>Loading our projects...</p></div>
+  <div id="marquee" class="marquee">
+    <div class="marquee-rows">
+      <div id="row1" class="marquee-row"></div>
+      <div id="row2" class="marquee-row"></div>
     </div>
   </div>
-  <dialog id="external-notice" class="external-notice">
-    <div class="notice-icon">↗</div>
-    <p class="eyebrow">External website</p>
-    <h3>You're leaving our website</h3>
-    <p class="notice-copy">You're about to visit a separate website. It is independently operated and has its own content and privacy practices.</p>
-    <div class="notice-url" id="notice-url">https://example.com</div>
-    <div class="notice-actions">
-      <button type="button" class="btn btn-ghost" id="notice-cancel">Go back</button>
-      <button type="button" class="btn btn-primary" id="notice-continue">Continue <span aria-hidden="true">↗</span></button>
-    </div>
-  </dialog>
 </section>
 
 <!-- WEBSITE PACKAGES -->
@@ -404,33 +377,11 @@ footer{position:relative;z-index:2;padding:60px 0 40px;border-top:1px solid rgba
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-config.js"></script>
-<script>if(!window.gsap||!window.ScrollTrigger)document.documentElement.classList.add("no-gsap");</script>
-<script src="portfolio.js" defer></script>
 <script type="importmap">
 { "imports": {
   "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
   "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
 }}
-</script>
-
-<!-- Keep the page functional if an animation CDN fails to load. -->
-<script>
-if (!window.gsap || !window.ScrollTrigger) {
-  document.documentElement.classList.add("no-gsap");
-  window.ScrollTrigger = window.ScrollTrigger || {
-    update() {},
-    batch() {},
-    create() { return {}; }
-  };
-  window.gsap = window.gsap || {
-    registerPlugin() {},
-    ticker: { add() {}, lagSmoothing() {} },
-    to() {},
-    from() {}
-  };
-}
 </script>
 
 <!-- MAIN SCRIPT -->
@@ -451,12 +402,58 @@ const SERVICES = [
   ["Google Business Profile & Maps","Show up on Google Maps with reviews, hours and directions.",'<path d="M12 21s-7-6.5-7-12a7 7 0 0114 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/>'],
 ];
 
+/* OUR WORK: website previews (same list and order as Jack's portfolio) */
+const MARQUEE_IMGS = [
+  "https://motionsites.ai/assets/hero-space-voyage-preview-eECLH3Yc.gif",
+  "https://motionsites.ai/assets/hero-codenest-preview-Cgppc2qV.gif",
+  "https://motionsites.ai/assets/hero-vex-ventures-preview-BczMFIiw.gif",
+  "https://motionsites.ai/assets/hero-stellar-ai-v2-preview-DjvxjG3C.gif",
+  "https://motionsites.ai/assets/hero-asme-preview-B_nGDnTP.gif",
+  "https://motionsites.ai/assets/hero-transform-data-preview-Cx5OU29N.gif",
+  "https://motionsites.ai/assets/hero-vitara-preview-Cjz2QYyU.gif",
+  "https://motionsites.ai/assets/hero-terra-preview-BFjrCr7T.gif",
+  "https://motionsites.ai/assets/hero-skyelite-preview-DHaZIgUv.gif",
+  "https://motionsites.ai/assets/hero-aethera-preview-DknSlcTa.gif",
+  "https://motionsites.ai/assets/hero-designpro-preview-D8c5_een.gif",
+  "https://motionsites.ai/assets/hero-stellar-ai-preview-D3HL6bw1.gif",
+  "https://motionsites.ai/assets/hero-xportfolio-preview-D4A8maiC.gif",
+  "https://motionsites.ai/assets/hero-orbit-web3-preview-BXt4OttD.gif",
+  "https://motionsites.ai/assets/hero-nexora-preview-cx5HmUgo.gif",
+  "https://motionsites.ai/assets/hero-evr-ventures-preview-DZxeVFEX.gif",
+  "https://motionsites.ai/assets/hero-planet-orbit-preview-DWAP8Z1P.gif",
+  "https://motionsites.ai/assets/hero-new-era-preview-CocuDUm9.gif",
+  "https://motionsites.ai/assets/hero-wealth-preview-B70idl_u.gif",
+  "https://motionsites.ai/assets/hero-luminex-preview-CxOP7ce6.gif",
+  "https://motionsites.ai/assets/hero-celestia-preview-0yO3jXO8.gif"
+];
+
 /* ---------- RENDER ---------- */
 document.getElementById("servicesGrid").innerHTML = SERVICES.map(([t,d,i])=>`
   <article class="card reveal tilt"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${i}</svg></div>
   <h3>${t}</h3><p>${d}</p></article>`).join("");
 
-/* The old marquee initializer was removed; no marquee script exists on this page. */
+/* Each row is tripled so the strip is always long enough to cover the screen while it slides */
+function fillRow(el, imgs) {
+  const tripled = [...imgs, ...imgs, ...imgs];
+  el.innerHTML = tripled.map(src => `<img class="marquee-img" loading="lazy" src="${src}" alt="Website preview" />`).join("");
+}
+const marqueeEl = document.getElementById("marquee");
+const row1 = document.getElementById("row1");
+const row2 = document.getElementById("row2");
+fillRow(row1, MARQUEE_IMGS.slice(0, 11));
+fillRow(row2, MARQUEE_IMGS.slice(11));
+
+/* Scroll-driven slide: row 1 drifts right, row 2 drifts left (same maths as Jack's page) */
+function onMarqueeScroll() {
+  const rect = marqueeEl.getBoundingClientRect();
+  const sectionTop = rect.top + window.scrollY;
+  const offset = (window.scrollY - sectionTop + window.innerHeight) * 0.3;
+  row1.style.transform = `translateX(${offset - 200}px)`;
+  row2.style.transform = `translateX(${-(offset - 200)}px)`;
+}
+window.addEventListener("scroll", onMarqueeScroll, { passive: true });
+window.addEventListener("resize", onMarqueeScroll);
+onMarqueeScroll();
 
 /* WEBSITE PACKAGES: edit the text here; "samples" are motionsites.ai preview images, 3 per package */
 const MS = "https://motionsites.ai/assets/";
