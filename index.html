@@ -124,6 +124,7 @@ nav ul a:hover{color:#fff}
 .sample:hover{border-color:var(--green);box-shadow:0 16px 50px -18px rgba(37,211,102,.55)}
 .sample img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
 .sample:hover img{transform:scale(1.06)}
+.image-placeholder{object-fit:cover;background:#07101e}
 /* label strip is always visible (phones have no hover) */
 .sample-cta{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:space-between;gap:10px;padding:14px 16px;font-size:.88rem;font-weight:600;background:linear-gradient(180deg,transparent 50%,rgba(5,7,13,.92))}
 .sample-cta b{color:var(--green);font-weight:600}
@@ -427,6 +428,47 @@ const MARQUEE_IMGS = [
   "https://motionsites.ai/assets/hero-celestia-preview-0yO3jXO8.gif"
 ];
 
+/* ---------- IMAGE RELIABILITY ---------- */
+/* External preview GIFs can fail if their original host blocks hotlinking or removes an asset.
+   Keep the layout intact and show a branded preview tile instead of a broken-image icon. */
+function imagePlaceholder(label) {
+  const safe = String(label || "Website preview").replace(/[<>&"]/g, "");
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="840" height="540" viewBox="0 0 840 540">
+    <defs>
+      <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#06152e"/><stop offset=".55" stop-color="#073c70"/><stop offset="1" stop-color="#062018"/></linearGradient>
+      <linearGradient id="a" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#00aeef"/><stop offset="1" stop-color="#0057ff"/></linearGradient>
+    </defs>
+    <rect width="840" height="540" rx="28" fill="url(#g)"/>
+    <circle cx="700" cy="110" r="170" fill="#00aeef" opacity=".12"/>
+    <circle cx="120" cy="470" r="180" fill="#25d366" opacity=".08"/>
+    <rect x="48" y="42" width="744" height="456" rx="18" fill="#07101e" stroke="#6bbce8" stroke-opacity=".35"/>
+    <rect x="48" y="42" width="744" height="48" rx="18" fill="#101f34"/>
+    <circle cx="76" cy="66" r="6" fill="#ff6b6b"/><circle cx="98" cy="66" r="6" fill="#ffd166"/><circle cx="120" cy="66" r="6" fill="#25d366"/>
+    <rect x="170" y="58" width="300" height="15" rx="7" fill="#31445e"/>
+    <rect x="92" y="132" width="330" height="20" rx="10" fill="url(#a)"/>
+    <rect x="92" y="174" width="430" height="15" rx="7" fill="#d9e7f7" opacity=".85"/>
+    <rect x="92" y="202" width="330" height="12" rx="6" fill="#91a8c3" opacity=".6"/>
+    <rect x="92" y="244" width="130" height="38" rx="19" fill="url(#a)"/>
+    <rect x="540" y="132" width="190" height="170" rx="18" fill="#15395c" stroke="#00aeef" stroke-opacity=".5"/>
+    <rect x="566" y="158" width="138" height="16" rx="8" fill="#8bdcff" opacity=".8"/>
+    <rect x="566" y="190" width="105" height="10" rx="5" fill="#8ba8c8" opacity=".7"/>
+    <rect x="566" y="214" width="122" height="10" rx="5" fill="#8ba8c8" opacity=".5"/>
+    <text x="92" y="390" fill="#ffffff" font-family="Arial,sans-serif" font-size="30" font-weight="700">${safe}</text>
+    <text x="92" y="430" fill="#9fb0c6" font-family="Arial,sans-serif" font-size="17">Website preview</text>
+  </svg>`;
+  return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
+}
+
+document.addEventListener("error", event => {
+  const img = event.target;
+  if (!(img instanceof HTMLImageElement) || img.dataset.fallbackApplied) return;
+  if (img.matches(".marquee-img, .sample img, .logo-img")) {
+    img.dataset.fallbackApplied = "true";
+    img.src = imagePlaceholder(img.alt || "Website preview");
+    img.classList.add("image-placeholder");
+  }
+}, true);
+
 /* ---------- RENDER ---------- */
 document.getElementById("servicesGrid").innerHTML = SERVICES.map(([t,d,i])=>`
   <article class="card reveal tilt"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${i}</svg></div>
@@ -435,7 +477,7 @@ document.getElementById("servicesGrid").innerHTML = SERVICES.map(([t,d,i])=>`
 /* Each row is tripled so the strip is always long enough to cover the screen while it slides */
 function fillRow(el, imgs) {
   const tripled = [...imgs, ...imgs, ...imgs];
-  el.innerHTML = tripled.map(src => `<img class="marquee-img" loading="lazy" src="${src}" alt="Website preview" />`).join("");
+  el.innerHTML = tripled.map(src => `<img class="marquee-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" src="${src}" alt="Website preview" />`).join("");
 }
 const marqueeEl = document.getElementById("marquee");
 const row1 = document.getElementById("row1");
@@ -489,7 +531,7 @@ document.getElementById("tiers").innerHTML = TIERS.map(t => `
       ${t.samples.map((f, i) => `
         <a class="sample" target="_blank" rel="noopener" aria-label="${t.name} website, style ${i + 1}: chat on WhatsApp"
            href="${waLink(`Hello Wealth's Tech, I like ${t.name} website style ${i + 1} and I'd like something like it. Can we talk?`)}">
-          <img loading="lazy" src="${MS + f}" alt="${t.name} website sample ${i + 1}" />
+          <img loading="lazy" decoding="async" referrerpolicy="no-referrer" src="${MS + f}" alt="${t.name} website sample ${i + 1}" />
           <span class="sample-cta"><span>${t.name} &middot; Style ${i + 1}</span><b>WhatsApp &rarr;</b></span>
         </a>`).join("")}
     </div>
