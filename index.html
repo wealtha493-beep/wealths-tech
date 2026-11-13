@@ -427,17 +427,6 @@ const MARQUEE_IMGS = [
   "https://motionsites.ai/assets/hero-celestia-preview-0yO3jXO8.gif"
 ];
 
-/* ---------- IMAGE LOADING: local copy first, motionsites.ai as backup ----------
-   The pictures are unchanged. We just look for each GIF in assets/work/ (run download_images.py once to fill it),
-   and if it is not there the browser falls back to the original motionsites.ai address. */
-const LOCAL_IMG_DIR = "assets/work/";
-const fileName = url => url.split("/").pop();
-function imgFallback(img){
-  if(img.dataset.tried) return;            // only retry once, so a dead link can't loop forever
-  img.dataset.tried = "1";
-  img.src = img.dataset.remote;
-}
-
 /* ---------- RENDER ---------- */
 document.getElementById("servicesGrid").innerHTML = SERVICES.map(([t,d,i])=>`
   <article class="card reveal tilt"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${i}</svg></div>
@@ -446,7 +435,7 @@ document.getElementById("servicesGrid").innerHTML = SERVICES.map(([t,d,i])=>`
 /* Each row is tripled so the strip is always long enough to cover the screen while it slides */
 function fillRow(el, imgs) {
   const tripled = [...imgs, ...imgs, ...imgs];
-  el.innerHTML = tripled.map(src => `<img class="marquee-img" loading="lazy" referrerpolicy="no-referrer" src="${LOCAL_IMG_DIR + fileName(src)}" data-remote="${src}" onerror="imgFallback(this)" alt="Website preview" />`).join("");
+  el.innerHTML = tripled.map(src => `<img class="marquee-img" loading="lazy" src="${src}" alt="Website preview" />`).join("");
 }
 const marqueeEl = document.getElementById("marquee");
 const row1 = document.getElementById("row1");
@@ -500,7 +489,7 @@ document.getElementById("tiers").innerHTML = TIERS.map(t => `
       ${t.samples.map((f, i) => `
         <a class="sample" target="_blank" rel="noopener" aria-label="${t.name} website, style ${i + 1}: chat on WhatsApp"
            href="${waLink(`Hello Wealth's Tech, I like ${t.name} website style ${i + 1} and I'd like something like it. Can we talk?`)}">
-          <img loading="lazy" referrerpolicy="no-referrer" src="${LOCAL_IMG_DIR + f}" data-remote="${MS + f}" onerror="imgFallback(this)" alt="${t.name} website sample ${i + 1}" />
+          <img loading="lazy" src="${MS + f}" alt="${t.name} website sample ${i + 1}" />
           <span class="sample-cta"><span>${t.name} &middot; Style ${i + 1}</span><b>WhatsApp &rarr;</b></span>
         </a>`).join("")}
     </div>
